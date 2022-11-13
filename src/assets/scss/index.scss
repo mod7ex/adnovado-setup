@@ -1,0 +1,9 @@
+.expand {
+    @include expand;
+}
+
+.overlay {
+    @include edges {
+        position: absolute;
+    }
+}

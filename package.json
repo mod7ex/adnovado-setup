@@ -1,0 +1,26 @@
+{
+    "name": "app.cpay.com.client",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "rm -Rf dist && tsc && vite",
+        "build": "rm -Rf dist && tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.4.3"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.9",
+        "@types/react": "^18.0.24",
+        "@types/react-dom": "^18.0.8",
+        "@types/react-router-dom": "^5.3.3",
+        "@vitejs/plugin-react": "^2.2.0",
+        "sass": "^1.56.1",
+        "typescript": "^4.6.4",
+        "vite": "^3.2.3"
+    }
+}
