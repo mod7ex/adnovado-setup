@@ -7,3 +7,25 @@
         position: absolute;
     }
 }
+
+/* ******************************** Helper classes ******************************** */
+
+$colors: (
+    "green": green,
+    "red": red,
+    "blue": blue,
+    "pink": pink,
+    "black": black,
+    "yellow": yellow,
+    "orange": orange,
+);
+
+@each $name, $color in $colors {
+    .br-#{$name} {
+        border: 1px solid $color;
+    }
+
+    .bg-#{$name} {
+        background-color: $color;
+    }
+}

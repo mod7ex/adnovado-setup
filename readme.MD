@@ -1,8 +1,9 @@
 > the idea behind the folder `lib` is implementing the FACADE pattern
 
-> the idea behind the folder `services` is integration with APIs (login  ...)
+> the idea behind the folder `services` is integration with APIs (login ...)
 
 > the idea behind the folder `features` https://youtu.be/UUga4-z7b6s?t=721
+
 ```
 features
 |___________ todos
@@ -19,3 +20,5 @@ it's just like the src folder (but many folders are optional)
 ```
 
 ---
+
+> hooks https://github.com/modex98/react-hads-dirty/tree/master/theory/src/hooks
