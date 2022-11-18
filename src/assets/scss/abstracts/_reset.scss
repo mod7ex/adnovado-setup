@@ -1,0 +1,19 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+* {
+    font-size: $edge_font_size;
+    line-height: $edge_line_height;
+}
+
+button {
+    outline: none;
+    border: none;
+}

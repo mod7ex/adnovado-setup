@@ -1,7 +1,6 @@
 import useLocalStorage from "~/hooks/useLocalStorage";
 import Outer from "~/layouts/outer";
 import { lazy, Suspense } from "react";
-import useToggle from "~/hooks/useToggle";
 import Loader from "@/loader";
 
 const LazyLogin = lazy(() => import("~/features/auth/login/components"));
@@ -12,9 +11,7 @@ const Auth = () => {
 
     return (
         <Outer>
-            <div>
-                <Suspense fallback={<Loader />}>{value ? <LazyLogin /> : <LazyRegistration />}</Suspense>
-            </div>
+            <Suspense fallback={<Loader />}>{value ? <LazyLogin /> : <LazyRegistration />}</Suspense>
         </Outer>
     );
 };

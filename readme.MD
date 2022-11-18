@@ -22,3 +22,5 @@ it's just like the src folder (but many folders are optional)
 ---
 
 > hooks https://github.com/modex98/react-hads-dirty/tree/master/theory/src/hooks
+
+> https://react-typescript-cheatsheet.netlify.app

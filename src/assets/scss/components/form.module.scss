@@ -1,0 +1,19 @@
+.root {
+    padding: 2rem 1rem;
+    border-radius: $br-rounded-md;
+    width: 100%;
+    @extend .app-border;
+
+    fieldset {
+        border: none;
+    }
+
+    .form-section {
+        &,
+        & > * {
+            width: 100%;
+        }
+
+        margin-bottom: 2rem;
+    }
+}

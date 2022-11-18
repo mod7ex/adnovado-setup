@@ -1,0 +1,95 @@
+@mixin edges($top: 0, $bottom: 0, $left: 0, $right: 0) {
+    top: $top;
+    bottom: $bottom;
+    left: $left;
+    right: $right;
+    @content;
+}
+
+@mixin expand() {
+    width: 100%;
+    height: 100%;
+    @content;
+}
+
+@mixin max-width($width) {
+    max-width: $width;
+    width: 100%;
+    @content;
+}
+
+/**************** Break Points ****************/
+
+@mixin break_point($bp: 0) {
+    @media (min-width: $bp) {
+        @content;
+    }
+}
+
+@mixin xs {
+    @media (min-width: map-get($break_points, "xs")) {
+        @content;
+    }
+}
+
+@mixin sm {
+    @media (min-width: map-get($break_points, "sm")) {
+        @content;
+    }
+}
+
+@mixin md {
+    @media (min-width: map-get($break_points, "md")) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media (min-width: map-get($break_points, "lg")) {
+        @content;
+    }
+}
+
+@mixin xl {
+    @media (min-width: map-get($break_points, "xl")) {
+        @content;
+    }
+}
+
+/**************** Flexbox ****************/
+
+@mixin flex($direction: row, $align: center, $justify: center, $gap: 0) {
+    display: flex;
+    gap: $gap;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    @content;
+}
+
+/**************** Box Shadow ****************/
+
+@mixin shadow($x: 0, $y: 0, $blur: 17px, $spread: 1px, $inset: false, $color: rgba(0, 0, 0, 0.3)) {
+    @if $inset {
+        box-shadow: $x $y $blur $spread inset $color;
+    } @else {
+        box-shadow: $x $y $blur $spread $color;
+    }
+
+    @content;
+}
+
+/**************** Center ****************/
+
+@mixin center($absolute: false) {
+    @if $absolute {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    margin-left: auto;
+    margin-right: auto;
+
+    @content;
+}

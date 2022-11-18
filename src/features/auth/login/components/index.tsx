@@ -1,28 +1,26 @@
 import { default as Form, FormSection } from "@/form";
+import Button from "@/button";
+import TextInput from "@/text-input";
+import useTranslation from "~/hooks/useTranslation";
 
 const Login = () => {
+    const { i18n: t } = useTranslation();
+
     return (
-        <>
-            <Form>
-                <FormSection>
-                    <label htmlFor="username">
-                        <span>{"username"}</span>
-                        <input id="username" type="text" name="username" />
-                    </label>
-                </FormSection>
+        <Form>
+            <FormSection>
+                <TextInput error="some" id="username" label={t("username")} />
+            </FormSection>
 
-                <FormSection>
-                    <label htmlFor="password">
-                        <span>{"password"}</span>
-                        <input id="password" type="password" name="password" />
-                    </label>
-                </FormSection>
+            <FormSection>
+                <TextInput error="some" id="password" label={t("password")} />
+            </FormSection>
 
-                <FormSection>
-                    <input type="submit" value="Login" />
-                </FormSection>
-            </Form>
-        </>
+            <FormSection>
+                {/* <input type="submit" value="Login" /> */}
+                <Button label={"click"} small={1} />
+            </FormSection>
+        </Form>
     );
 };
 

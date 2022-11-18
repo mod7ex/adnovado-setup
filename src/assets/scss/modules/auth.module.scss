@@ -1,5 +1,10 @@
 .container {
-    background-color: green;
     height: 100vh;
-    @include flex;
+
+    padding-top: 10rem;
+
+    .auth {
+        @include center;
+        @include max-width(600px);
+    }
 }

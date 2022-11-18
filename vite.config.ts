@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 
-const additionalData = `@import "./src/assets/scss/global";`;
+const additionalData = `@import "./src/assets/scss/abstracts";`;
 
 // https://vitejs.dev/config/
 export default defineConfig({

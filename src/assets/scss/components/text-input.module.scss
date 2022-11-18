@@ -1,0 +1,68 @@
+$border-bottom: 0.2rem;
+
+.root {
+    .label {
+        border: 1px solid black;
+        display: none;
+    }
+
+    .input {
+        width: 100%;
+        display: block;
+        position: relative;
+        background-color: white;
+        input {
+            background-color: transparent;
+            width: 100%;
+            border: none;
+            border-bottom: $border-bottom solid rgba($gray, 0.5);
+            position: relative;
+            z-index: 10;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        &::after {
+            content: " ";
+            @include edges($top: auto) {
+                position: absolute;
+            }
+            height: $border-bottom;
+            @include center;
+            z-index: 11;
+            width: 0;
+            transition: width $duration ease;
+        }
+
+        &::before {
+            content: attr(data-label);
+            @include flex;
+            @include edges($right: auto) {
+                position: absolute;
+            }
+            color: $gray;
+            transition: all $duration ease;
+        }
+    }
+
+    .input:has(input:focus) {
+        &::before {
+            bottom: 100%;
+            top: -20%;
+            font-size: 0.7rem;
+            color: $blue;
+        }
+
+        &::after {
+            background-color: $blue;
+            width: 100%;
+        }
+    }
+
+    small {
+        font-size: 0.7rem;
+        color: $red;
+    }
+}
