@@ -1,3 +1,4 @@
+import { /* useRef */ useState } from "react";
 import styles from "~/assets/scss/components/text-input.module.scss";
 type InputProps = React.ComponentPropsWithoutRef<"input">;
 
@@ -9,6 +10,11 @@ interface Props extends InputProps {
 }
 
 const TextInput: React.FC<Props> = ({ id, label, type, name, error, placeholder, ...props }) => {
+    // const ref = useRef<HTMLInputElement>(null);
+    const [value, setValue] = useState("");
+
+    console.log(value);
+
     const _label = label ? (
         <label className={styles.label} htmlFor={id}>
             {label}
@@ -19,8 +25,8 @@ const TextInput: React.FC<Props> = ({ id, label, type, name, error, placeholder,
     return (
         <div className={styles.root}>
             {_label}
-            <span className={styles.input} data-label={label ?? placeholder}>
-                <input id={id} type={type} name={name} placeholder={placeholder} {...props} />
+            <span className={`${styles.input} ${value ? styles.filled : ""}`} data-label={label ?? placeholder}>
+                <input onInput={(e) => setValue(e.currentTarget.value)} id={id} type={type} name={name} placeholder={placeholder} {...props} />
             </span>
             {_error}
         </div>

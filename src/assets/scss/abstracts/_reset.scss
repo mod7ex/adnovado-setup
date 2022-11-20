@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: all $duration ease-out;
 }
 
 html,
@@ -13,7 +14,12 @@ body,
     line-height: $edge_line_height;
 }
 
-button {
+button,
+input {
     outline: none;
     border: none;
+
+    &:focus {
+        outline: none;
+    }
 }

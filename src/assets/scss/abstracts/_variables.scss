@@ -1,8 +1,6 @@
 $edge_font_size: calc(11px + (14 - 11) * (100vw - 400px) / (1000 - 400));
 $edge_line_height: calc(18px + (25 - 18) * (100vw - 400px) / (1000 - 400));
 
-/********************* Colors *********************/
-
 /********************* Break Points *********************/
 $break_points: (
     "xs": "200px",
@@ -22,6 +20,9 @@ $br-rounded-lg: 11px;
 $red: red;
 $gray: gray;
 $blue: blue;
+$green: green;
+$black: black;
+$white: white;
 
 /********************* Timing *********************/
 

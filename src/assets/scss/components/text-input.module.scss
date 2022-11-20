@@ -18,10 +18,6 @@ $border-bottom: 0.2rem;
             border-bottom: $border-bottom solid rgba($gray, 0.5);
             position: relative;
             z-index: 10;
-
-            &:focus {
-                outline: none;
-            }
         }
 
         &::after {
@@ -55,6 +51,23 @@ $border-bottom: 0.2rem;
             color: $blue;
         }
 
+        &::after {
+            background-color: $blue;
+            width: 100%;
+        }
+    }
+
+    .input:has(input[value="d"]),
+    .filled {
+        &::before {
+            bottom: 100%;
+            top: -20%;
+            font-size: 0.7rem;
+            color: $blue;
+        }
+    }
+
+    .input:has(input[value="d"]) {
         &::after {
             background-color: $blue;
             width: 100%;

@@ -1,8 +1,31 @@
+@keyframes bg {
+    0% {
+        width: 20px;
+        height: 20px;
+    }
+
+    0% {
+        width: 100px;
+        height: 40px;
+    }
+
+    100% {
+        width: auto;
+        height: auto;
+    }
+}
+
 .root {
     cursor: pointer;
     @include flex;
     border-radius: $br-rounded-sm;
     padding: 0.5rem 1.3rem;
+
+    background-color: $gray;
+    color: $black;
+    &:hover {
+        background-color: rgba($gray, 0.7);
+    }
 
     &.sm {
         padding: 0.25rem 0.65rem;
@@ -16,5 +39,57 @@
         p {
             font-size: 1.3rem;
         }
+    }
+
+    &.primary {
+        background-color: $blue;
+        color: $white;
+        &:hover {
+            background-color: rgba($blue, 0.7);
+        }
+    }
+
+    &.success {
+        background-color: $green;
+        color: $white;
+        &:hover {
+            background-color: rgba($green, 0.7);
+        }
+    }
+
+    &.danger {
+        background-color: $red;
+        color: $white;
+        &:hover {
+            background-color: rgba($red, 0.7);
+        }
+    }
+
+    position: relative;
+
+    &::before {
+        content: " ";
+        @include edges {
+            position: absolute;
+        }
+        width: 20px;
+        height: 20px;
+        @include center($y: true);
+        background-color: red;
+        z-index: 1;
+    }
+
+    &:focus {
+        &::before {
+            animation-name: bg;
+            animation-duration: 2s;
+            animation-iteration-count: 1;
+        }
+    }
+
+    @include shadow($blur: 0, $color: current);
+
+    &:hover {
+        @include shadow($blur: 2px, $spread: 1px);
     }
 }
