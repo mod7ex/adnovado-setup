@@ -1,11 +1,6 @@
 $border-bottom: 0.2rem;
 
 .root {
-    .label {
-        border: 1px solid black;
-        display: none;
-    }
-
     .input {
         width: 100%;
         display: block;
@@ -57,7 +52,6 @@ $border-bottom: 0.2rem;
         }
     }
 
-    .input:has(input[value="d"]),
     .filled {
         &::before {
             bottom: 100%;
@@ -67,15 +61,13 @@ $border-bottom: 0.2rem;
         }
     }
 
-    .input:has(input[value="d"]) {
-        &::after {
-            background-color: $blue;
-            width: 100%;
-        }
-    }
-
-    small {
+    .error {
         font-size: 0.7rem;
         color: $red;
+
+        &.empty {
+            color: transparent;
+            user-select: none;
+        }
     }
 }

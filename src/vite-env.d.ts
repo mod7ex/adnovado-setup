@@ -10,6 +10,8 @@ type ValueOrConcluder<T> = T | ((v: T) => T);
 /* ************************** ********* ************************** */
 type Tfunction = (...args: any[]) => any;
 
+type Numberish = string | number;
+
 /* ************************** ********* ************************** */
 
 interface ImportMetaEnv {

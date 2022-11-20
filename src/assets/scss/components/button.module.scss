@@ -1,17 +1,14 @@
-@keyframes bg {
-    0% {
-        width: 20px;
-        height: 20px;
+@keyframes animate {
+    from {
+        width: 0;
+        height: 0;
+        opacity: 0.5;
     }
 
-    0% {
-        width: 100px;
-        height: 40px;
-    }
-
-    100% {
-        width: auto;
-        height: auto;
+    to {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
     }
 }
 
@@ -20,21 +17,19 @@
     @include flex;
     border-radius: $br-rounded-sm;
     padding: 0.5rem 1.3rem;
-
     background-color: $gray;
+    position: relative;
     color: $black;
-    &:hover {
-        background-color: rgba($gray, 0.7);
-    }
+    overflow: hidden;
 
-    &.sm {
+    &.small {
         padding: 0.25rem 0.65rem;
         p {
             font-size: 0.7rem;
         }
     }
 
-    &.lg {
+    &.large {
         padding: 0.7rem 2rem;
         p {
             font-size: 1.3rem;
@@ -44,7 +39,7 @@
     &.primary {
         background-color: $blue;
         color: $white;
-        &:hover {
+        &:not([disabled]):hover {
             background-color: rgba($blue, 0.7);
         }
     }
@@ -52,7 +47,7 @@
     &.success {
         background-color: $green;
         color: $white;
-        &:hover {
+        &:not([disabled]):hover {
             background-color: rgba($green, 0.7);
         }
     }
@@ -60,36 +55,36 @@
     &.danger {
         background-color: $red;
         color: $white;
-        &:hover {
+        &:not([disabled]):hover {
             background-color: rgba($red, 0.7);
         }
     }
 
-    position: relative;
-
-    &::before {
-        content: " ";
-        @include edges {
-            position: absolute;
+    &.link {
+        background-color: transparent;
+        color: $black;
+        &:not([disabled]):hover {
+            background-color: rgba($black, 0.1);
         }
-        width: 20px;
-        height: 20px;
-        @include center($y: true);
-        background-color: red;
-        z-index: 1;
-    }
-
-    &:focus {
-        &::before {
-            animation-name: bg;
-            animation-duration: 2s;
-            animation-iteration-count: 1;
-        }
-    }
-
-    @include shadow($blur: 0, $color: current);
-
-    &:hover {
         @include shadow($blur: 2px, $spread: 1px);
+    }
+
+    &:not([disabled]):hover {
+        background-color: rgba($gray, 0.7);
+        @include shadow($blur: 2px, $spread: 1px);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        filter: blur(0.9px);
+    }
+
+    .ripple {
+        position: absolute;
+        background-color: #fff;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        border-radius: 50%;
+        animation: animate linear 1s infinite;
     }
 }

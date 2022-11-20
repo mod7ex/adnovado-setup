@@ -9,9 +9,13 @@ const LazyRegistration = lazy(() => import("~/features/auth/registration/compone
 const Auth = () => {
     const [value, setValue] = useLocalStorage<boolean>("has_ever_logged", true);
 
+    const switchProcess = () => {
+        setValue((v) => !v);
+    };
+
     return (
         <Outer>
-            <Suspense fallback={<Loader />}>{value ? <LazyLogin /> : <LazyRegistration />}</Suspense>
+            <Suspense fallback={<Loader />}>{value ? <LazyLogin onSwitchProcess={switchProcess} /> : <LazyRegistration onSwitchProcess={switchProcess} />}</Suspense>
         </Outer>
     );
 };
