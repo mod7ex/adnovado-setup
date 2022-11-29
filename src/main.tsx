@@ -11,6 +11,14 @@ import "~/services/service-worker";
 //     </StrictMode>
 // );
 
+setTimeout(() => {
+    try {
+        fetch("/some-no-img.jpeg");
+    } finally {
+        //
+    }
+}, 5000);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <></>
