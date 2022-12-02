@@ -70,6 +70,26 @@ const cacheByOrigine = (req, res) => {
     return CACHE;
 };
 
+const createResponse = () => {
+    const body = {
+        name: "Some name",
+        email: "m@m.co",
+    };
+
+    const file = new File([JSON.stringify(body)], "data.json", { type: "application/json" });
+
+    return new Response(file, {
+        status: 200,
+        statusText: "All good",
+        // @ts-ignore
+        headers: {
+            "x-some-header": "some value",
+            "content-type": "application/json",
+            "content-length": file.size,
+        },
+    });
+};
+
 self.addEventListener("fetch", (e) => {
     // ------------> [ExtendableEvent]
     // service worker intercepted a fetch call
@@ -159,6 +179,8 @@ self.addEventListener("message", (e) => {
     const clientId = e.source.id;
 
     console.log("[Message]: ", { data, clientId });
+
+    createResponse();
 
     setTimeout(() => {
         // after doing some work
