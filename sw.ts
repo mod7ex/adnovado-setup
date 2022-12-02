@@ -10,10 +10,8 @@ const assets = ["/", "/logo.svg", "vite.svg"];
 self.addEventListener("install", (e) => {
     // ------------> [ExtendableEvent]
 
-    // @ts-ignore
     self.skipWaiting(); // skip waiting to activate (but... the page will not be using the sw yet, needs to claim clients)
 
-    // @ts-ignore
     e.waitUntil(
         caches.open(STATIC_CACHE).then((cache) => {
             cache
@@ -30,13 +28,11 @@ self.addEventListener("activate", (e) => {
     // ------------> [ExtendableEvent]
     console.log("[SW]: Activated");
 
-    // @ts-ignore
     clients.claim().then(() => {
         // claim means that the html file will use this new service worker.
         console.log("the service worker has now claimed all the pages so they can use the service worker");
     });
 
-    // @ts-ignore
     e.waitUntil(
         // delete old caches
         caches.keys().then((items) => {
@@ -57,7 +53,7 @@ self.addEventListener("activate", (e) => {
     );
 });
 
-const cacheByOrogine = (req, res) => {
+const cacheByOrigine = (req, res) => {
     /**
      * we decide in wich cache bottle we will store the data based on it's nature
      */
@@ -66,7 +62,6 @@ const cacheByOrogine = (req, res) => {
     const type = res.headers.get("content-type");
 
     if (type) {
-        // @ts-ignore
         if (type.match(/^text\css/i) || req.url.match(/fonts.googleapis.com/i)) {
             CACHE = DYNAMIC_CACHE;
         }
@@ -78,24 +73,22 @@ const cacheByOrogine = (req, res) => {
 self.addEventListener("fetch", (e) => {
     // ------------> [ExtendableEvent]
     // service worker intercepted a fetch call
-    // @ts-ignore
     // console.log("[SW]: Intercepted http request", e.request);
 
-    // @ts-ignore
-    // e.respondWith(fetch(e.request));
-
     // e.respondWith(
-    //     // @ts-ignore
+    //
     //     caches.match(e.request).then((res) => {
     //         if (res) return res;
-    //         // @ts-ignore
+    //
     //         else return fetch(e.request);
     //     })
     // );
 
     const request: Request = e.request;
 
-    // @ts-ignore
+    e.respondWith(fetch(e.request));
+
+    /*
     e.respondWith(
         caches.match(request).then((res) => {
             if (res) return res;
@@ -114,7 +107,7 @@ self.addEventListener("fetch", (e) => {
                 return fetch(request, options)
                     .then((fetchResp) => {
                         if (fetchResp.ok) {
-                            let CACHE = cacheByOrogine(request, fetchResp);
+                            let CACHE = cacheByOrigine(request, fetchResp);
 
                             return caches.open(CACHE).then((cache) => {
                                 cache.put(request, fetchResp.clone());
@@ -135,11 +128,43 @@ self.addEventListener("fetch", (e) => {
             });
         })
     );
+*/
 });
+
+const sendMsg = async <T>(msg: T, clientId?: string) => {
+    let allClients: Client[] = [];
+
+    if (clientId) {
+        const c = await clients.get(clientId);
+        c && allClients.push(c);
+    } else {
+        // @ts-ignore
+        allClients = await clients.matchAll({ includeUncontrolled: true });
+    }
+
+    return Promise.all(
+        allClients.map((c) => {
+            console.log(`post message ${msg} to ${c.id}`);
+            return c.postMessage(msg);
+        })
+    );
+};
 
 self.addEventListener("message", (e) => {
     // ------------> [ExtendableEvent]
     // message from webpage
+
+    const data = e.data;
+    // @ts-ignore
+    const clientId = e.source.id;
+
+    console.log("[Message]: ", { data, clientId });
+
+    setTimeout(() => {
+        // after doing some work
+        sendMsg("i did something with the data", clientId);
+        sendMsg("message for all clients");
+    }, 5000);
 });
 
-// https://www.youtube.com/playlist?list=PLyuRouwmQCjl4iJgjH3i61tkqauM-NTGj          7
+// https://www.youtube.com/playlist?list=PLyuRouwmQCjl4iJgjH3i61tkqauM-NTGj          8

@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import "~/assets/scss/index.scss";
 // import App from "~/App";
-// import "~/services/service-worker";
-import "~/services/service-worker";
+import init, { sendMsgToSW } from "~/services/service-worker";
+
+init();
 
 // ReactDOM.createRoot(document.getElementById("root")!).render(
 //     <StrictMode>
@@ -11,16 +12,32 @@ import "~/services/service-worker";
 //     </StrictMode>
 // );
 
-setTimeout(() => {
-    try {
-        fetch("/some-no-img.jpeg");
-    } finally {
-        //
-    }
-}, 5000);
+const App = () => {
+    const handle = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <></>
-    </StrictMode>
-);
+        const data = new FormData(e.target as HTMLFormElement);
+
+        sendMsgToSW({ email: data.get("email"), name: data.get("name") });
+    };
+
+    return (
+        <StrictMode>
+            <form action="" method="POST" onSubmit={handle}>
+                <input type="text" name="name" placeholder="name" />
+                <input type="email" name="email" placeholder="e-mail" />
+                <input type="submit" value="Submit" />
+            </form>
+        </StrictMode>
+    );
+};
+
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+
+// setTimeout(() => {
+//     try {
+//         fetch("/some-no-img.jpeg");
+//     } finally {
+//         //
+//     }
+// }, 5000);

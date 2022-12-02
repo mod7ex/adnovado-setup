@@ -1,7 +1,9 @@
 let sw;
 
-const sendMsgToSW = <T>(msg: T) => {
-    navigator.serviceWorker.controller?.postMessage(msg);
+export const sendMsgToSW = <T>(msg: T) => {
+    if (navigator.serviceWorker?.controller) {
+        navigator.serviceWorker.controller.postMessage(msg);
+    }
 };
 
 const cacheSize = () => {
@@ -35,38 +37,38 @@ const cacheSize = () => {
 };
 
 const init = () => {
-    if (!("serviceWorker" in navigator)) return console.log("Service worker are not supported");
+    window.addEventListener("load", () => {
+        if (!("serviceWorker" in navigator)) return console.log("Service worker are not supported");
 
-    // 1 - register the Service worker
-    navigator.serviceWorker
-        .register("../../sw.ts", { scope: "/" })
-        .then((registration) => {
-            console.log("[Handler] Service worker: Registered");
-            sw = registration.installing || registration.waiting || registration.active;
-        })
-        .catch((err) => console.log(`[Handler] Service worker: Registration error ${err}`));
+        // 1 - register the Service worker
+        navigator.serviceWorker
+            .register("../../sw.ts", { scope: "/" })
+            .then((registration) => {
+                console.log("[Handler] Service worker: Registered");
+                sw = registration.installing || registration.waiting || registration.active;
+            })
+            .catch((err) => console.log(`[Handler] Service worker: Registration error ${err}`));
 
-    // 2 - see if the current page has a running service worker
-    if (navigator.serviceWorker.controller) console.log("[Handler] Service worker: There is an installed service worker");
+        // 2 - see if the current page has a running service worker
+        if (navigator.serviceWorker.controller) console.log("[Handler] Service worker: There is an installed service worker");
 
-    // 3 - register a handler to detect when a new or updated service worker is installed & activated
-    navigator.serviceWorker.oncontrollerchange = (e) => {
-        console.log("[Handler] Service worker: Activated");
+        // 3 - register a handler to detect when a new or updated service worker is installed & activated
+        navigator.serviceWorker.oncontrollerchange = (e) => {
+            console.log("[Handler] Service worker: Activated");
 
-        cacheSize();
-    };
+            cacheSize();
+        };
 
-    /*
-    // 4 - remove/unregister service worker
-    navigator.serviceWorker.getRegistrations().then((regs) => { for (let reg of regs) { reg.unregister().then((isUnreg) => console.log(isUnreg)); } });
-    */
+        /*
+        // 4 - remove/unregister service worker
+        navigator.serviceWorker.getRegistrations().then((regs) => { for (let reg of regs) { reg.unregister().then((isUnreg) => console.log(isUnreg)); } });
+        */
 
-    // 5 - listen to service worker messages
-    navigator.serviceWorker.addEventListener("message", ({ data }) => {
-        console.log(`web page received: ${data}`);
+        // 5 - listen to service worker messages
+        navigator.serviceWorker.addEventListener("message", ({ data }) => {
+            console.log(`web page received: ${data}`);
+        });
     });
 };
-
-window.addEventListener("load", init);
 
 export default init;
