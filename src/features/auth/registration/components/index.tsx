@@ -43,7 +43,7 @@ const Register: React.FC<Props> = ({ onSwitchProcess }) => {
                 <TextInput error="this is how error will show up here" type="password" id="password_confirmation" name="password_confirmation" label={t("password confirmation")} />
             </FormSection>
 
-            <FormSection className={styles.termsConditions}>
+            <FormSection className={styles.checkbox}>
                 <CheckBox label={t("I agree")} />
                 <Link to="#">{t("Terms")}</Link>
                 <span>&</span>

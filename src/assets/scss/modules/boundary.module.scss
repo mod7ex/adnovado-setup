@@ -1,0 +1,42 @@
+.boundary {
+    * {
+        font-size: 1em;
+    }
+
+    @include flex($gap: 1em);
+
+    &.root {
+        height: 100vh;
+        flex-direction: column;
+    }
+
+    .content {
+        font-weight: 900;
+        color: $red;
+    }
+
+    .btn {
+        width: 2.7em;
+        height: 2.7em;
+        padding: 0.5em;
+        border-radius: 50%;
+        @include shadow($blur: 1px, $spread: 1px, $color: rgba($green, 0.9));
+        position: relative;
+        @include flex;
+        .btn_inner {
+            position: absolute;
+            @include flex;
+        }
+
+        &:hover {
+            @include shadow($blur: 3px, $spread: 1px, $color: $green);
+            .btn_inner {
+                rotate: deg(60);
+            }
+        }
+
+        &:focus {
+            @include shadow($blur: 1px, $spread: 1px, $color: rgba($green, 0.9));
+        }
+    }
+}

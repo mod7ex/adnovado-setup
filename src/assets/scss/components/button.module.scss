@@ -13,7 +13,6 @@
 }
 
 .root {
-    cursor: pointer;
     @include flex;
     border-radius: $br-rounded-sm;
     padding: 0.5rem 1.3rem;

@@ -188,5 +188,3 @@ self.addEventListener("message", (e) => {
         sendMsg("message for all clients");
     }, 5000);
 });
-
-// https://www.youtube.com/playlist?list=PLyuRouwmQCjl4iJgjH3i61tkqauM-NTGj          8

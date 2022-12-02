@@ -1,7 +1,8 @@
+import styles from "~/assets/scss/modules/auth.module.scss";
 import { default as Form, FormSection } from "@/form";
+import useTranslation from "~/hooks/useTranslation";
 import TextInput from "@/text-input";
 import CheckBox from "@/check-box";
-import useTranslation from "~/hooks/useTranslation";
 import Link from "@/link";
 import React from "react";
 
@@ -26,7 +27,7 @@ const Login: React.FC<Props> = ({ onSwitchProcess }) => {
                 <TextInput error="this is how error will show up here" id="password" name="password" label={t("password")} />
             </FormSection>
 
-            <FormSection>
+            <FormSection className={styles.checkbox}>
                 <CheckBox label={t("Remember me")} name="remember" />
             </FormSection>
         </Form>

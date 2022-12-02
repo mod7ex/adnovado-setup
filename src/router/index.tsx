@@ -1,5 +1,6 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Auth from "~/pages/auth";
+import Private from "~/router/Private";
 
 export default createBrowserRouter([
     {
@@ -12,8 +13,7 @@ export default createBrowserRouter([
         element: (
             <>
                 <h3>inner</h3>
-                <hr />
-                <Outlet />
+                <Private />
             </>
         ),
         children: [
