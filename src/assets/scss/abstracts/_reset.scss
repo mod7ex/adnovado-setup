@@ -1,18 +1,29 @@
-*,
-*::after,
-*::before {
+// *,
+// *::after,
+// *::before {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+//     transition: all $duration ease-out;
+//     font-size: $edge_font_size;
+//     line-height: $edge_line_height;
+// }
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     transition: all $duration ease-out;
-}
-
-html,
-body,
-* {
     font-size: $edge_font_size;
     line-height: $edge_line_height;
 }
+
+// html,
+// body,
+// * {
+//     font-size: $edge_font_size;
+//     line-height: $edge_line_height;
+// }
 
 button,
 input {
@@ -26,6 +37,23 @@ input {
 
 button {
     background-color: transparent;
-    border: none;
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+
+    &:visited {
+        color: $secondary-color;
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+ul {
+    li {
+        list-style: none;
+    }
 }

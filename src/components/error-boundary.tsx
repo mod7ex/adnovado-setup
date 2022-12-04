@@ -12,12 +12,12 @@ interface State {
     hasError: boolean;
 }
 
-const Fallback = () => {
+export const Fallback: React.FC<{ message?: Numberish }> = ({ message = "Opps! Something went wrong" }) => {
     const { Trans } = useTranslation();
 
     return (
         <div className={`${styles.boundary} ${styles.root}`}>
-            <Trans>{(t) => <p className={styles.content}> {t("Opps! Something went wrong")} </p>}</Trans>
+            <Trans>{(t) => <p className={styles.content}> {t(message.toString())} </p>}</Trans>
             <button className={styles.btn}>
                 <small className={styles.btnInner}>
                     <ErrorSVG />

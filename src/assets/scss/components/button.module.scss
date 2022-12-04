@@ -36,10 +36,10 @@
     }
 
     &.primary {
-        background-color: $blue;
+        background-color: $primary-color;
         color: $white;
         &:not([disabled]):hover {
-            background-color: rgba($blue, 0.7);
+            background-color: rgba($primary-color, $hover-bg);
         }
     }
 
@@ -47,7 +47,7 @@
         background-color: $green;
         color: $white;
         &:not([disabled]):hover {
-            background-color: rgba($green, 0.7);
+            background-color: rgba($green, $hover-bg);
         }
     }
 
@@ -55,7 +55,7 @@
         background-color: $red;
         color: $white;
         &:not([disabled]):hover {
-            background-color: rgba($red, 0.7);
+            background-color: rgba($red, $hover-bg);
         }
     }
 
@@ -69,7 +69,7 @@
     }
 
     &:not([disabled]):hover {
-        background-color: rgba($gray, 0.7);
+        background-color: rgba($gray, $hover-bg);
         @include shadow($blur: 2px, $spread: 1px);
     }
 

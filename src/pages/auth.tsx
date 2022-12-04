@@ -1,5 +1,4 @@
 import useLocalStorage from "~/hooks/useLocalStorage";
-import Outer from "~/layouts/outer";
 import { lazy, Suspense } from "react";
 import Loader from "~/components/svg/loader";
 import styles from "~/assets/scss/modules/auth.module.scss";
@@ -20,11 +19,7 @@ const Auth = () => {
         setValue((v) => !v);
     };
 
-    return (
-        <Outer>
-            <Suspense fallback={AuthLoader}>{value ? <LazyLogin onSwitchProcess={switchProcess} /> : <LazyRegistration onSwitchProcess={switchProcess} />}</Suspense>
-        </Outer>
-    );
+    return <Suspense fallback={AuthLoader}>{value ? <LazyLogin onSwitchProcess={switchProcess} /> : <LazyRegistration onSwitchProcess={switchProcess} />}</Suspense>;
 };
 
 export default Auth;

@@ -1,55 +1,96 @@
 import { createBrowserRouter } from "react-router-dom";
 import Auth from "~/pages/auth";
 import Private from "~/router/Private";
+import Public from "~/router/Public";
+import Dashboard from "~/pages/dashboard";
+import Inner from "~/layouts/inner";
+import Outer from "~/layouts/outer";
+import { Fallback as ErrorPage } from "@/error-boundary";
+
+const auth = true;
 
 export default createBrowserRouter([
     {
         path: "/auth",
-        element: <Auth />,
-        children: [],
+        element: (
+            <Public auth={auth}>
+                <Outer>
+                    <Auth />
+                </Outer>
+            </Public>
+        ),
     },
+
     {
         path: "/",
-        element: (
-            <>
-                <h3>inner</h3>
-                <Private />
-            </>
-        ),
+        element: <Private auth={auth} />,
+        errorElement: <ErrorPage message={"404 Page Not Found"} />,
         children: [
             {
                 index: true,
-                element: <h1>Dashboard</h1>,
+                element: (
+                    <Inner>
+                        <Dashboard />
+                    </Inner>
+                ),
             },
 
             {
                 path: "profile",
-                element: <h1>Profile</h1>,
+                element: (
+                    <Inner>
+                        <h1>Profile</h1>
+                    </Inner>
+                ),
             },
 
             {
                 path: "settings",
-                element: <h1>Settings</h1>,
+                element: (
+                    <Inner>
+                        <h1>Settings</h1>
+                    </Inner>
+                ),
             },
 
             {
                 path: "orders",
-                element: <h1>Orders</h1>,
                 children: [
                     {
+                        index: true,
+                        element: (
+                            <Inner>
+                                <h1>Orders</h1>
+                            </Inner>
+                        ),
+                    },
+                    {
                         path: ":id",
+                        element: (
+                            <Inner>
+                                <h1>Orders id</h1>
+                            </Inner>
+                        ),
                     },
                 ],
             },
 
             {
                 path: "listings",
-                element: <h1>Listings</h1>,
+                element: (
+                    <Inner>
+                        <h1>Listings</h1>
+                    </Inner>
+                ),
             },
 
             {
                 path: "help",
-                element: <h1>help</h1>,
+                element: (
+                    <Inner>
+                        <h1>help</h1>
+                    </Inner>
+                ),
             },
 
             {

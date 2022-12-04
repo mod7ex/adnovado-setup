@@ -68,6 +68,7 @@
     gap: $gap;
     flex-direction: $direction;
     justify-content: $justify;
+    // justify-items: $justify;
     align-items: $align;
     @content;
 }

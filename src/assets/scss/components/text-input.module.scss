@@ -43,11 +43,11 @@ $border-bottom: 0.2rem;
             bottom: 100%;
             top: -20%;
             font-size: 0.7rem;
-            color: $blue;
+            color: $primary-color;
         }
 
         &::after {
-            background-color: $blue;
+            background-color: $primary-color;
             width: 100%;
         }
     }
@@ -57,7 +57,7 @@ $border-bottom: 0.2rem;
             bottom: 100%;
             top: -20%;
             font-size: 0.7rem;
-            color: $blue;
+            color: $primary-color;
         }
     }
 

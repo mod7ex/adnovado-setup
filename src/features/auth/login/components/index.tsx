@@ -20,11 +20,11 @@ const Login: React.FC<Props> = ({ onSwitchProcess }) => {
     return (
         <Form title={t("Login")} footer={footer} cta={t("Login")}>
             <FormSection>
-                <TextInput error="this is how error will show up here" id="username" name="username" label={t("username")} />
+                <TextInput error="this is how error will show up here" id="username" name="username" label={t("username")} value="modex98" />
             </FormSection>
 
             <FormSection>
-                <TextInput error="this is how error will show up here" id="password" name="password" label={t("password")} />
+                <TextInput error="this is how error will show up here" id="password" name="password" label={t("password")} value="password" />
             </FormSection>
 
             <FormSection className={styles.checkbox}>

@@ -17,12 +17,21 @@ $br-rounded-md: 7px;
 $br-rounded-lg: 11px;
 
 /********************* Colors *********************/
+// https://color.adobe.com/create/color-wheel
+
 $red: #ff0000;
-$gray: gray;
-$blue: #0000ff;
 $green: #008000;
+
+$gray: gray;
+
 $black: black;
 $white: white;
+
+$primary-color: #0000ff;
+$secondary-color: #00007a;
+$third-color: #00003b;
+
+$hover-bg: 0.7;
 
 /********************* Timing *********************/
 
