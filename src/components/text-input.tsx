@@ -6,9 +6,10 @@ interface Props extends InputProps {
     label?: React.ReactNode;
     type?: "text" | "password" | "email" | "search";
     error?: string;
+    errable?: boolean | 0 | 1;
 }
 
-const TextInput: React.FC<Props> = ({ label, type = "text", error, placeholder, ...props }) => {
+const TextInput: React.FC<Props> = ({ errable = true, label, type = "text", error, placeholder, ...props }) => {
     const [value, setValue] = useState("");
 
     // const _error = <small className={`${styles.error} ${error ? "" : styles.empty}`}>{error || "."}</small>;
@@ -19,7 +20,7 @@ const TextInput: React.FC<Props> = ({ label, type = "text", error, placeholder, 
             <span className={`${styles.input} ${value ? styles.filled : ""}`} data-label={label ?? placeholder}>
                 <input onInput={(e) => setValue(e.currentTarget.value)} type={type} placeholder={placeholder} {...props} />
             </span>
-            {_error}
+            {errable ? _error : null}
         </div>
     );
 };

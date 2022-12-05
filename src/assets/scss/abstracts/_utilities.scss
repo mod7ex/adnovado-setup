@@ -10,7 +10,11 @@
 
 .app-border {
     // @include shadow($blur: 1px, $spread: 1px, $color: hsla(0, 0%, 0%, 0.3));
-    border: 1px solid hsla(0, 0%, 0%, 0.3);
+    border: 1px solid #0000004d;
+}
+
+.disabled-link {
+    pointer-events: none !important;
 }
 
 /* ******************************** Helper classes ******************************** */

@@ -5,6 +5,22 @@ type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
 const currentYear = new Date().getFullYear();
 
+const nav = [
+    { to: "/listings", label: "Listings", disabled: false },
+    { to: "/orders", label: "Orders", disabled: false },
+    { to: "/settings", label: "Settings", disabled: false },
+    { to: "/help", label: "Help", disabled: true },
+];
+
+const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disabled?: boolean }>({ isActive, isPending, disabled }: T) => {
+    let payload = "";
+    if (isActive) payload += ` ${styles.active}`;
+    if (isPending) payload += ` ${styles.pending}`;
+    if (disabled) payload += ` ${styles.disabled}`;
+
+    return payload;
+};
+
 const NavBar: React.FC<RawProps> = ({ ...props }) => {
     const { i18n: t } = useTranslation();
 
@@ -16,24 +32,17 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                 </Link>
             </div>
             <ul>
-                <li>
-                    <NavLink to="/profile">{t("profile")}</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/settings">{t("settings")}</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/orders">{t("orders")}</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/listings">{t("listings")}</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/help">{t("help")}</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/logout">{t("logout")}</NavLink>
-                </li>
+                {nav.map(({ to, label, disabled }, i) => (
+                    <li key={i}>
+                        {disabled ? (
+                            <span className={classHandler({ disabled, isActive: false })}>{t(label)}</span>
+                        ) : (
+                            <NavLink className={classHandler} to={to}>
+                                {t(label)}
+                            </NavLink>
+                        )}
+                    </li>
+                ))}
             </ul>
             <div className={styles.footer}>
                 <p>Copyright &#169;{currentYear} cBay</p>

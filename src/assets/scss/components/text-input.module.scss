@@ -5,12 +5,12 @@ $border-bottom: 0.2rem;
         width: 100%;
         display: block;
         position: relative;
-        background-color: white;
+        // background-color: white;
         input {
             background-color: transparent;
             width: 100%;
             border: none;
-            border-bottom: $border-bottom solid rgba($gray, 0.5);
+            border-bottom: $border-bottom solid rgba($gray, $hover-bg * 0.9);
             position: relative;
             z-index: 10;
         }

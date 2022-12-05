@@ -21,22 +21,25 @@
                 @include flex($justify: stretch, $align: stretch);
 
                 input {
-                    background-color: $primary-color;
+                    // background-color: $primary-color;
+                    background: $primary-color;
+                    background: linear-gradient(0, $primary-color 0%, $third-color 100%);
                     border-top-left-radius: $br-rounded-md;
-                    border-bottom-left-radius: $br-rounded-md;
                     color: $white;
                     padding: 0 0.5rem;
                 }
 
                 button {
                     border-top-right-radius: $br-rounded-md;
-                    border-bottom-right-radius: $br-rounded-md;
-                    background-color: rgba($primary-color, $hover-bg);
-                    @include flex;
+                    // background-color: rgba($primary-color, $hover-bg);
+                    background: $primary-color;
+                    background: linear-gradient(0, $primary-color 0%, $third-color 100%);
                     padding: 0 0.5rem;
+                    @include flex;
+                    border-bottom: 0.2rem solid rgba($gray, $hover-bg * 0.9);
 
                     &:hover {
-                        background-color: rgba($secondary-color, $hover-bg);
+                        background: rgba($secondary-color, $hover-bg);
                     }
                 }
             }
@@ -84,10 +87,67 @@
                 }
             }
 
-            & > button {
-                @include flex;
-                img {
-                    border-radius: 50%;
+            .profile {
+                position: relative;
+
+                & > button {
+                    @include flex;
+                    img {
+                        border-radius: 50%;
+                    }
+                }
+
+                nav {
+                    right: 0;
+                    top: 50px;
+                    position: absolute;
+                    background-color: $secondary-color;
+                    border-radius: $br-rounded-md;
+                    @include shadow($blur: 11px, $spread: 3px, $color: rgba($secondary-color, $hover-bg * 0.5));
+
+                    &::after {
+                        content: " ";
+                        position: absolute;
+                        background-color: $secondary-color;
+                        top: -6px;
+                        right: 14px;
+                        width: 13px;
+                        height: 13px;
+                        transform: rotate(45deg);
+                        @include shadow($blur: 11px, $spread: 3px, $color: rgba($secondary-color, $hover-bg * 0.5));
+                    }
+
+                    p,
+                    li {
+                        white-space: nowrap;
+                    }
+
+                    p {
+                        padding: 0.7rem 2rem;
+                        text-align: center;
+                    }
+
+                    ul {
+                        @include flex($direction: column, $align: stretch);
+                        li {
+                            border-top: 1px solid rgba(255, 255, 255, $hover-bg * 0.5);
+                            text-align: left;
+
+                            a {
+                                font-size: 0.8rem;
+                                color: $white;
+                                padding: 0.2rem 1rem;
+                                width: 100%;
+                                display: inline-block;
+
+                                &:hover {
+                                    text-decoration: none;
+                                    background-color: $third-color;
+                                    padding: 0.2rem 2rem;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -108,6 +168,14 @@
         }
 
         .logo {
+            margin-bottom: 3rem;
+            a {
+                @include flex;
+                img {
+                    max-width: 7.7rem;
+                    margin: 0 auto;
+                }
+            }
         }
 
         .footer {
@@ -122,15 +190,25 @@
         ul {
             li {
                 margin-bottom: 1em;
-                a {
+                a,
+                span {
                     border-radius: $br-rounded-md;
-                    padding: 0.3rem 1rem;
+                    padding: $hover-bg * 0.5rem 1rem;
                     display: inline-block;
                     width: 100%;
 
                     &:hover {
                         background-color: rgba($primary-color, $hover-bg);
                         padding-left: 1.7rem;
+                    }
+
+                    &.active {
+                        background-color: rgba($primary-color, $hover-bg);
+                    }
+
+                    &.disabled {
+                        @extend .disabled-link;
+                        color: rgba($white, $hover-bg * 0.5);
                     }
                 }
             }

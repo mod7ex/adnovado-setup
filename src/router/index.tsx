@@ -28,29 +28,17 @@ export default createBrowserRouter([
         children: [
             {
                 index: true,
-                element: (
-                    <Inner>
-                        <Dashboard />
-                    </Inner>
-                ),
+                element: <Dashboard />,
             },
 
             {
                 path: "profile",
-                element: (
-                    <Inner>
-                        <h1>Profile</h1>
-                    </Inner>
-                ),
+                element: <h1>Profile</h1>,
             },
 
             {
                 path: "settings",
-                element: (
-                    <Inner>
-                        <h1>Settings</h1>
-                    </Inner>
-                ),
+                element: <h1>Settings</h1>,
             },
 
             {
@@ -58,43 +46,28 @@ export default createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: (
-                            <Inner>
-                                <h1>Orders</h1>
-                            </Inner>
-                        ),
+                        element: <h1>Orders</h1>,
                     },
                     {
                         path: ":id",
-                        element: (
-                            <Inner>
-                                <h1>Orders id</h1>
-                            </Inner>
-                        ),
+                        element: <h1>Orders id</h1>,
                     },
                 ],
             },
 
             {
                 path: "listings",
-                element: (
-                    <Inner>
-                        <h1>Listings</h1>
-                    </Inner>
-                ),
+                element: <h1>Listings</h1>,
             },
 
             {
                 path: "help",
-                element: (
-                    <Inner>
-                        <h1>help</h1>
-                    </Inner>
-                ),
+                element: <h1>help</h1>,
             },
 
             {
                 path: "logout",
+                element: <></>,
             },
         ],
     },
