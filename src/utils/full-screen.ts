@@ -2,7 +2,7 @@ const fail = <T extends string>(msg: T) => {
     throw Error(msg);
 };
 
-export function openFullScreen() {
+export function open() {
     const el = document.documentElement;
 
     let open: () => Promise<void> = async () => {};
@@ -24,7 +24,7 @@ export function openFullScreen() {
 }
 
 /* Close fullscreen */
-export function closeFullScreen() {
+export function close() {
     let close: () => Promise<void> = async () => {};
 
     if ("exitFullscreen" in document) {

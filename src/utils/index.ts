@@ -10,3 +10,5 @@ export const catchErr = (fn: Tfunction, catcher: (e: unknown) => any) => {
         return catcher(e);
     }
 };
+
+export { close, open } from "~/utils/full-screen";

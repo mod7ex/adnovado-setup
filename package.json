@@ -1,7 +1,6 @@
 {
     "name": "app.cpay.com.client",
     "private": true,
-    "version": "0.0.0",
     "type": "module",
     "scripts": {
         "dev": "rm -Rf dist && tsc && vite",
@@ -11,13 +10,15 @@
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.4.3"
+        "react-router-dom": "^6.4.3",
+        "react-transition-group": "^4.4.5"
     },
     "devDependencies": {
         "@types/node": "^18.11.9",
         "@types/react": "^18.0.24",
         "@types/react-dom": "^18.0.8",
         "@types/react-router-dom": "^5.3.3",
+        "@types/react-transition-group": "^4.4.5",
         "@types/serviceworker": "^0.0.57",
         "@vitejs/plugin-react": "^2.2.0",
         "sass": "^1.56.1",

@@ -38,3 +38,26 @@ $colors: (
         background-color: $color;
     }
 }
+
+/* ******************************** Profile classes ******************************** */
+
+.show-up-and-fade {
+    transition: all $duration * 0.5 ease-out;
+
+    &__entering {
+        transform: translateY(25px);
+        opacity: 0;
+    }
+
+    &__entered {
+        opacity: 1;
+    }
+
+    &__exiting {
+        opacity: 1;
+    }
+
+    &__exited {
+        opacity: 0;
+    }
+}
