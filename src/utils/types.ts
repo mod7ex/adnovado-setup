@@ -25,7 +25,7 @@ export enum OBJECT_TYPES {
 
 // export const isPlainObject = (value: unknown): value is object => toTypeString(value) === OBJECT_TYPES.PLAIN_OBJECT;
 
-// export const isArray = Array.isArray;
+export const isArray = Array.isArray;
 
 // export const isObject = (value: unknown): value is Record<any, any> => value !== null && typeof value === "object"; // all kinds of objects, even maps ...
 

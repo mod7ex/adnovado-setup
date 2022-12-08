@@ -12,6 +12,8 @@ type Tfunction = (...args: any[]) => any;
 
 type Numberish = string | number;
 
+type TEmpty = undefined | null;
+
 /* ************************** ********* ************************** */
 
 interface ImportMetaEnv {

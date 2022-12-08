@@ -1,34 +1,42 @@
-import { ROOT_URL } from "~/helpers";
+// https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
 
-type RawProps = Exclude<React.ImgHTMLAttributes<HTMLImageElement>, "width" | "height">;
+import useAsync from "~/hooks/useAsync";
 
-type RawPropsKeys = "src" | "decoding" | "loading" | "className" | "width" | "height";
+type RawProps = React.ComponentProps<"img">;
 
-type Props =
-    | ({
-          fill: true;
-      } & {
-          [K in Exclude<RawPropsKeys, "width" | "height">]: RawProps[K];
-      })
-    | ({
-          fill: false;
-      } & {
-          [K in RawPropsKeys]: RawProps[K];
-      });
-
-const SVGRegex = /\.svg$/i;
+type Props = { fill?: true } & RawProps;
 
 // prettier-ignore
-const Image: React.FC<Partial<Props>> = ({
+const Img: React.FC<Partial<Omit<Props, "src"> & {name: string}>> = ({
         decoding = "async",
         loading = "lazy",
-        src = "",
-        fill = false,
+        name,
+        fill,
         className = "",
         ...rest
     }) => {
-    src = new URL(src, `${ROOT_URL}/assets/${SVGRegex.test(src) ? "svg" : "img"}/`).pathname;
+    const { pending, value, error } = useAsync(async () => {
+        const response = await import(`../assets/img/${name}.webp`);
+        return response.default;
+    });
 
+    if (pending) return <>&#x21bb;</>; /* <>&#8226;&#8226;&#8226;</> */
+
+    if (error) return <span className="err" >&#9888;</span>;
+
+    // prettier-ignore
+    return <img
+                src={value}
+                decoding={decoding}
+                loading={loading}
+                className={(className + ` ${fill ? 'expand' : ''}`).trim()}
+                {...rest}
+            />;
+};
+
+export default Img;
+
+export const ExternalImg: React.FC<Props> = ({ fill, src, decoding = "async", loading = "lazy", className = "", ...rest }) => {
     // prettier-ignore
     return <img
                 src={src}
@@ -38,5 +46,3 @@ const Image: React.FC<Partial<Props>> = ({
                 {...rest}
             />;
 };
-
-export default Image;
