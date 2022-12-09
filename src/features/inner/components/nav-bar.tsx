@@ -5,6 +5,8 @@ type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
 const currentYear = new Date().getFullYear();
 
+const listings = [];
+
 const nav = [
     { to: "/listings", label: "Listings", disabled: false },
     { to: "/orders", label: "Orders", disabled: false },

@@ -11,4 +11,25 @@ export const catchErr = (fn: Tfunction, catcher: (e: unknown) => any) => {
     }
 };
 
+export const trimChar = (payload: string, target: string): string => {
+    if (!payload) return payload;
+
+    if (payload.startsWith(target)) {
+        return trimChar(payload.slice(1, payload.length), target);
+    }
+
+    if (payload.endsWith(target)) {
+        return trimChar(payload.slice(0, payload.length - 1), target);
+    }
+
+    return payload;
+};
+
+export const app_join = (payload: string[]) => {
+    return payload
+        .filter((v) => !!v)
+        .map((v) => trimChar(v, "/"))
+        .join("/");
+};
+
 export { close, open } from "~/utils/full-screen";
