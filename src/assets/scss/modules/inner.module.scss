@@ -190,16 +190,18 @@
         ul {
             li {
                 margin-bottom: 1em;
-                a,
-                span {
+                .nav-item {
                     border-radius: $br-rounded-md;
                     padding: $hover-bg * 0.5rem 1rem;
                     display: inline-block;
                     width: 100%;
+                    @include flex($justify: flex-start, $gap: 1rem);
 
                     &:hover {
                         background-color: rgba($primary-color, $hover-bg);
-                        padding-left: 1.7rem;
+                        p {
+                            padding-left: 0.7rem;
+                        }
                     }
 
                     &.active {
@@ -209,6 +211,10 @@
                     &.disabled {
                         @extend .disabled-link;
                         color: rgba($white, $hover-bg * 0.5);
+                        img {
+                            // filter: blur(2px);
+                            filter: grayscale(1);
+                        }
                     }
                 }
             }

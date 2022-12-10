@@ -61,3 +61,19 @@ $colors: (
         opacity: 0;
     }
 }
+
+/* ******************************** Icon classes ******************************** */
+.icon {
+    @include flex;
+    position: relative;
+    cursor: pointer !important;
+
+    .icon-inner {
+        // border: 1px solid white;
+    }
+
+    &::before {
+        content: " ";
+        @include edges;
+    }
+}

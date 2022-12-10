@@ -1,21 +1,21 @@
 import { AppLink, AppNavLink } from "~/router/components";
 import styles from "~/assets/scss/modules/inner.module.scss";
 import useTranslation from "~/hooks/useTranslation";
+import Icon from "~/components/icon";
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
 const currentYear = new Date().getFullYear();
 
-const listings = [];
-
 const nav = [
-    { name: "Listings", label: "Listings", disabled: false },
-    { name: "Orders", label: "Orders", disabled: false },
-    { name: "Settings", label: "Settings", disabled: false },
-    { name: "Help", label: "Help", disabled: true },
+    { name: "Listings", icon: "listings", label: "Listings" },
+    { name: "Orders", icon: "orders", label: "Orders" },
+    { name: "Settings", icon: "settings", label: "Settings" },
+    { name: "Help", icon: "help", label: "Help", disabled: true },
 ];
 
 const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disabled?: boolean }>({ isActive, isPending, disabled }: T) => {
-    let payload = "";
+    let payload = styles.navItem;
+
     if (isActive) payload += ` ${styles.active}`;
     if (isPending) payload += ` ${styles.pending}`;
     if (disabled) payload += ` ${styles.disabled}`;
@@ -34,13 +34,15 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                 </AppLink>
             </div>
             <ul>
-                {nav.map(({ name, label, disabled }, i) => (
+                {nav.map(({ name, label, disabled, icon }, i) => (
                     <li key={i}>
                         {disabled ? (
-                            <span className={classHandler({ disabled, isActive: false })}>{t(label)}</span>
+                            <span className={classHandler({ disabled, isActive: false })}>
+                                <Icon name={icon} /> <p>{t(label)}</p>
+                            </span>
                         ) : (
                             <AppNavLink className={classHandler} to={{ name }}>
-                                {t(label)}
+                                <Icon name={icon} /> <p>{t(label)}</p>
                             </AppNavLink>
                         )}
                     </li>

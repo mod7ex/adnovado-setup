@@ -1,10 +1,18 @@
 // https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
 
-type RawProps = Omit<React.ComponentProps<"img">, "src">;
+// https://css-tricks.com/using-svg
+
+type RawProps = React.ComponentProps<"span">;
 
 import useAsync from "~/hooks/useAsync";
 
-const Icon: React.FC<RawProps & { name: string }> = ({ decoding = "async", loading = "lazy", name, height = 20, width = 20, ...rest }) => {
+interface Props extends RawProps {
+    height?: Numberish;
+    width?: Numberish;
+    name?: string;
+}
+
+const Icon: React.FC<Props> = ({ name, height = 1.2, width = 1.2, ...rest }) => {
     const { pending, value, error } = useAsync(async () => {
         const response = await import(`../assets/svg/${name}.svg`);
         return response.default;
@@ -12,17 +20,35 @@ const Icon: React.FC<RawProps & { name: string }> = ({ decoding = "async", loadi
 
     if (pending) return <>&#x21bb;</>; /* <>&#8226;&#8226;&#8226;</> */
 
-    if (error) return <span style={{ color: "red" }}>&#9888;</span>;
+    const style = {
+        display: "block",
+        width: `${width}rem`,
+        height: `${height}rem`,
+    };
+
+    if (error)
+        return (
+            <span style={{ ...style, color: "red" }} {...rest}>
+                &#9888;
+            </span>
+        );
 
     // prettier-ignore
-    return <img
-                decoding={decoding}
-                loading={loading}
-                height={height}
-                width={width}
-                src={value}
-                {...rest}
-            />;
+    // return <img
+    //             decoding={decoding}
+    //             loading={loading}
+    //             height={height}
+    //             width={width}
+    //             src={value}
+    //             {...rest}
+    //         />;
+
+    return (
+        <span className="icon" style={style} {...rest} >
+            <object type="image/svg+xml" className="icon-inner" data={value} style={style}>
+            </object>
+        </span>
+    );
 };
 
 export default Icon;
