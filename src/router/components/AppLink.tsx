@@ -1,14 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { type ITo, resolve_payload } from "~/router/utils";
 import { isObject } from "~/utils/types";
 
-type RawProps = React.ComponentProps<typeof NavLink>;
+type RawProps = React.ComponentProps<typeof Link>;
 
 interface Props extends RawProps {
     to: ITo | RawProps["to"];
 }
 
-const AppNavLink: React.FC<Props> = ({ children, to, ...props }) => {
+const AppLink: React.FC<Props> = ({ children, to, ...props }) => {
     let _to: Props["to"] = to;
 
     if (isObject(to) && "name" in to) {
@@ -16,10 +16,10 @@ const AppNavLink: React.FC<Props> = ({ children, to, ...props }) => {
     }
 
     return (
-        <NavLink to={_to} {...props}>
+        <Link to={_to} {...props}>
             {children}
-        </NavLink>
+        </Link>
     );
 };
 
-export default AppNavLink;
+export default AppLink;

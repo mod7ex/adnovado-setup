@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom";
+import { AppLink, AppNavLink } from "~/router/components";
 import styles from "~/assets/scss/modules/inner.module.scss";
 import useTranslation from "~/hooks/useTranslation";
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
@@ -8,10 +8,10 @@ const currentYear = new Date().getFullYear();
 const listings = [];
 
 const nav = [
-    { to: "/listings", label: "Listings", disabled: false },
-    { to: "/orders", label: "Orders", disabled: false },
-    { to: "/settings", label: "Settings", disabled: false },
-    { to: "/help", label: "Help", disabled: true },
+    { name: "Listings", label: "Listings", disabled: false },
+    { name: "Orders", label: "Orders", disabled: false },
+    { name: "Settings", label: "Settings", disabled: false },
+    { name: "Help", label: "Help", disabled: true },
 ];
 
 const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disabled?: boolean }>({ isActive, isPending, disabled }: T) => {
@@ -29,19 +29,19 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
     return (
         <nav {...props}>
             <div className={styles.logo}>
-                <Link to="/">
+                <AppLink to={{ name: "Dashboard" }}>
                     <img src={"/cropped-logo.svg"} alt="logo" />
-                </Link>
+                </AppLink>
             </div>
             <ul>
-                {nav.map(({ to, label, disabled }, i) => (
+                {nav.map(({ name, label, disabled }, i) => (
                     <li key={i}>
                         {disabled ? (
                             <span className={classHandler({ disabled, isActive: false })}>{t(label)}</span>
                         ) : (
-                            <NavLink className={classHandler} to={to}>
+                            <AppNavLink className={classHandler} to={{ name }}>
                                 {t(label)}
-                            </NavLink>
+                            </AppNavLink>
                         )}
                     </li>
                 ))}

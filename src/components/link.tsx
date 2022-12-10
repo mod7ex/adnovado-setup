@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
+import { AppLink } from "~/router/components";
 import styles from "~/assets/scss/components/link.module.scss";
 
-type Props = React.ComponentProps<typeof Link>;
+type Props = React.ComponentProps<typeof AppLink>;
 
-const AppLink: React.FC<Props> = ({ children, className, ...rest }) => {
+const Link: React.FC<Props> = ({ children, className, ...rest }) => {
     return (
-        <Link className={`${className} ${styles.root}`} {...rest}>
+        <AppLink className={`${className} ${styles.root}`} {...rest}>
             {children}
-        </Link>
+        </AppLink>
     );
 };
 
-export default AppLink;
+export default Link;

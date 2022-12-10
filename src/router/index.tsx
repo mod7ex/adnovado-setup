@@ -1,15 +1,14 @@
-import { createBrowserRouter, Params, type RouteObject } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Auth from "~/pages/auth";
 import Private from "~/router/Private";
 import Public from "~/router/Public";
 import Dashboard from "~/pages/dashboard";
 import Outer from "~/layouts/outer";
 import { Fallback as ErrorPage } from "@/error-boundary";
-import { app_join } from "~/utils";
 
 const auth = true;
 
-let routes = [
+export const routes = [
     {
         path: "/auth",
         name: "Auth",
@@ -116,36 +115,3 @@ let routes = [
 ];
 
 export default createBrowserRouter(routes);
-
-interface IRoute {
-    name?: string;
-    path?: string;
-    children?: IRoute[];
-}
-
-const _to = (name: string, items: IRoute[]): string[] => {
-    for (let route of items) {
-        let _path: string[] = [];
-
-        if ("path" in route) {
-            _path.push(route.path!);
-        }
-
-        if ("name" in route) {
-            if (route.name === name) {
-                return _path.length ? _path : [""];
-            }
-        }
-
-        if ("children" in route) {
-            const _children_path = _to(name, route.children!);
-            if (_children_path.length) return [..._path, ..._children_path];
-        }
-    }
-
-    return [];
-};
-
-export const to = (name: Parameters<typeof _to>[0]) => {
-    return app_join(_to(name, routes));
-};

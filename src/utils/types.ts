@@ -9,9 +9,9 @@ export enum OBJECT_TYPES {
     PLAIN_OBJECT = "[object Object]",
 }
 
-// export const objectToString = Object.prototype.toString;
+export const objectToString = Object.prototype.toString;
 
-// export const toTypeString = (value: unknown): string => objectToString.call(value);
+export const toTypeString = (value: unknown): string => objectToString.call(value);
 
 // export const isMap = <K, V>(value: unknown): value is Map<K, V> => toTypeString(value) === OBJECT_TYPES.MAP;
 
@@ -23,10 +23,10 @@ export enum OBJECT_TYPES {
 
 // export const isDate = (value: unknown): value is Date => toTypeString(value) === OBJECT_TYPES.DATE;
 
-// export const isPlainObject = (value: unknown): value is object => toTypeString(value) === OBJECT_TYPES.PLAIN_OBJECT;
+export const isPlainObject = (value: unknown): value is object => toTypeString(value) === OBJECT_TYPES.PLAIN_OBJECT;
 
 export const isArray = Array.isArray;
 
-// export const isObject = (value: unknown): value is Record<any, any> => value !== null && typeof value === "object"; // all kinds of objects, even maps ...
+export const isObject = (value: unknown): value is Record<any, any> => value !== null && typeof value === "object"; // all kinds of objects, even maps ...
 
 export const isFunction = (value: unknown): value is Tfunction => typeof value === "function";
