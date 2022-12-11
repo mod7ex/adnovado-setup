@@ -1,3 +1,5 @@
+$hover-padding: 0.7rem;
+
 .container {
     min-height: 100vh;
     display: grid;
@@ -51,8 +53,8 @@
                 @include flex($gap: 1rem);
 
                 button {
-                    width: 1.9rem;
-                    height: 1.9rem;
+                    width: 2rem;
+                    height: 2rem;
                     border-radius: 50%;
                     position: relative;
                     @include flex;
@@ -68,7 +70,7 @@
                 .notifications {
                     button {
                         position: relative;
-                        span {
+                        p {
                             // content: attr(data-count);
                             background-color: red;
                             position: absolute;
@@ -133,17 +135,30 @@
                             border-top: 1px solid rgba(255, 255, 255, $hover-bg * 0.5);
                             text-align: left;
 
+                            $nav-gap: 0.7rem;
+
                             a {
-                                font-size: 0.8rem;
-                                color: $white;
-                                padding: 0.2rem 1rem;
                                 width: 100%;
-                                display: inline-block;
+                                color: $white;
+                                display: block;
+                                padding: 0.2rem $nav-gap;
+                                @include flex($justify: flex-start, $gap: $nav-gap);
+
+                                p {
+                                    padding: 0;
+                                    text-align: left;
+                                    font-size: $nav-gap;
+                                    flex-grow: 1;
+                                    @include flex($justify: flex-start);
+                                }
 
                                 &:hover {
                                     text-decoration: none;
                                     background-color: $third-color;
-                                    padding: 0.2rem 2rem;
+
+                                    p {
+                                        padding-left: $hover-padding;
+                                    }
                                 }
                             }
                         }
@@ -200,7 +215,7 @@
                     &:hover {
                         background-color: rgba($primary-color, $hover-bg);
                         p {
-                            padding-left: 0.7rem;
+                            padding-left: $hover-padding;
                         }
                     }
 
@@ -211,13 +226,23 @@
                     &.disabled {
                         @extend .disabled-link;
                         color: rgba($white, $hover-bg * 0.5);
-                        img {
-                            // filter: blur(2px);
-                            filter: grayscale(1);
-                        }
                     }
                 }
             }
+
+            /*
+            li:has(> .disabled) {
+                position: relative;
+                &::before {
+                    content: " ";
+                    @include edges;
+                    z-index: 1;
+                }
+                span[role="icon"] {
+                    visibility: none !important;
+                }
+            }
+            */
         }
     }
 

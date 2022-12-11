@@ -10,43 +10,39 @@ interface Props extends RawProps {
     height?: Numberish;
     width?: Numberish;
     name?: string;
+    disabled?: true;
 }
 
-const Icon: React.FC<Props> = ({ name, height = 1.2, width = 1.2, ...rest }) => {
-    const { pending, value, error } = useAsync(async () => {
-        const response = await import(`../assets/svg/${name}.svg`);
-        return response.default;
-    });
-
-    if (pending) return <>&#x21bb;</>; /* <>&#8226;&#8226;&#8226;</> */
-
+const Icon: React.FC<Props> = ({ name, height = 1.2, width = 1.2, disabled, ...rest }) => {
     const style = {
         display: "block",
         width: `${width}rem`,
         height: `${height}rem`,
     };
 
-    if (error)
-        return (
-            <span style={{ ...style, color: "red" }} {...rest}>
-                &#9888;
-            </span>
-        );
+    const { pending, value, error } = useAsync(async () => {
+        const response = await import(`../assets/svg/${name}.svg`);
+        return response.default;
+    });
 
-    // prettier-ignore
-    // return <img
-    //             decoding={decoding}
-    //             loading={loading}
-    //             height={height}
-    //             width={width}
-    //             src={value}
-    //             {...rest}
-    //         />;
+    let inner;
+
+    if (disabled) inner = <></>;
+    else if (pending) inner = <>&#x21bb;</>; /* <>&#8226;&#8226;&#8226;</> */
+    else if (error) inner = <>&#9888;</>;
+    else {
+        inner = (
+            <object type="image/svg+xml" className="icon-inner" data={value} style={style}>
+                <span style={{ ...style, color: "red" }} {...rest}>
+                    &#9888;
+                </span>
+            </object>
+        );
+    }
 
     return (
-        <span className="icon" style={style} {...rest} >
-            <object type="image/svg+xml" className="icon-inner" data={value} style={style}>
-            </object>
+        <span className="icon" role="icon" style={style} {...rest}>
+            {inner}
         </span>
     );
 };

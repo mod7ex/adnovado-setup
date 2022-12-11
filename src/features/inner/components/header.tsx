@@ -1,5 +1,5 @@
 import styles from "~/assets/scss/modules/inner.module.scss";
-import { NavLink } from "react-router-dom";
+import { AppLink } from "~/router/components";
 import useToggle from "~/hooks/useToggle";
 import TextInput from "@/text-input";
 import useFullScreen from "~/hooks/useFullScreen";
@@ -8,6 +8,7 @@ import { useRef } from "react";
 import useClickOutside from "~/hooks/useClickOutside";
 import Icon from "@/icon";
 import { ExternalImg } from "@/image";
+import useTranslation from "~/hooks/useTranslation";
 
 type RawProps = React.ComponentPropsWithoutRef<"header">;
 
@@ -16,12 +17,14 @@ const FullScreenToggler = () => {
 
     return (
         <button onClick={toggle}>
-            <Icon name={`full-screen${enabled ? "-quit" : ""}`} alt="full screen status" />
+            <Icon name={`full-screen${enabled ? "-quit" : ""}`} />
         </button>
     );
 };
 
 const ProfileNav = () => {
+    const { i18n: t } = useTranslation();
+
     const [collapsed, toggle] = useToggle(true);
 
     const nodeRef = useRef(null);
@@ -38,7 +41,7 @@ const ProfileNav = () => {
     return (
         <div className={styles.profile}>
             <button ref={btnRef} onClick={(e) => toggle((v) => !v)}>
-                <ExternalImg width={40} height={40} src="https://placeimg.com/100/100/people" alt="profile" />
+                <ExternalImg width={40} height={40} src="https://placeimg.com/100/100/people" />
             </button>
 
             {
@@ -48,10 +51,14 @@ const ProfileNav = () => {
                             <p>Mourad EL CADI</p>
                             <ul>
                                 <li>
-                                    <NavLink to={"/profile"}>Profile Settings</NavLink>
+                                    <AppLink to={{ name: "Profile" }}>
+                                        <Icon name="profile" width={1} height={1} /> <p>{t("Profile Settings")}</p>
+                                    </AppLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/logout"}>Sign Out</NavLink>
+                                    <AppLink to={{ name: "Logout" }}>
+                                        <Icon name="sign-out" width={1} height={1} /> <p>{t("Sign Out")}</p>
+                                    </AppLink>
                                 </li>
                             </ul>
                         </nav>
@@ -82,7 +89,7 @@ const Header: React.FC<RawProps> = ({ ...props }) => {
                     </li> */}
                     <li className={styles.notifications}>
                         <button data-count="13">
-                            <span>13</span>
+                            <p>13</p>
                             <Icon name="bell" />
                         </button>
                     </li>

@@ -38,7 +38,8 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                     <li key={i}>
                         {disabled ? (
                             <span className={classHandler({ disabled, isActive: false })}>
-                                <Icon name={icon} /> <p>{t(label)}</p>
+                                <Icon name={icon} disabled={disabled} />
+                                <p>{t(label)}</p>
                             </span>
                         ) : (
                             <AppNavLink className={classHandler} to={{ name }}>
