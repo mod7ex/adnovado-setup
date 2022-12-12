@@ -3,9 +3,7 @@
 }
 
 .overlay {
-    @include edges {
-        position: absolute;
-    }
+    @include edges;
 }
 
 .app-border {

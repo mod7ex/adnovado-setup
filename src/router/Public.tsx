@@ -1,9 +1,7 @@
-import React from "react";
-
-import { Navigate } from "react-router-dom";
+import { AppNavigate } from "~/router/components";
 
 const Public: React.FC<{ children: React.ReactElement; auth?: boolean }> = ({ children, auth }) => {
-    return auth ? <Navigate to="/" /> : children;
+    return auth ? <AppNavigate to={{ name: "Dashboard" }} /> : children;
 };
 
 export default Public;

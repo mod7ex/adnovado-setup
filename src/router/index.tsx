@@ -4,6 +4,7 @@ import Private from "~/router/Private";
 import Public from "~/router/Public";
 import Dashboard from "~/pages/dashboard";
 import Outer from "~/layouts/outer";
+import { Form as ListingForm, Index as ListingsIndex } from "~/pages/listings";
 import { Fallback as ErrorPage } from "@/error-boundary";
 
 const auth = true;
@@ -70,7 +71,7 @@ export const routes = [
                 children: [
                     {
                         index: true,
-                        element: <h1>Listings</h1>,
+                        element: <ListingsIndex />,
                         name: "Listings",
                     },
                     {
@@ -78,12 +79,12 @@ export const routes = [
                         children: [
                             {
                                 index: true,
-                                element: <h1>Listing id</h1>,
+                                element: <ListingForm />,
                                 name: "Listing",
                             },
                             {
                                 path: "edit",
-                                element: <h1>Listing id edit</h1>,
+                                element: <ListingForm />,
                                 name: "EditListing",
                             },
                             {

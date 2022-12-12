@@ -1,5 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Inner from "~/layouts/inner";
+import { AppNavigate } from "~/router/components";
 
 const Private: React.FC<{ auth?: boolean }> = ({ auth }) => {
     return auth ? (
@@ -7,7 +8,7 @@ const Private: React.FC<{ auth?: boolean }> = ({ auth }) => {
             <Outlet />
         </Inner>
     ) : (
-        <Navigate to="/auth" />
+        <AppNavigate to={{ name: "Auth" }} />
     );
 };
 
