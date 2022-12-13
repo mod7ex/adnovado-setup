@@ -12,6 +12,7 @@ $header-height: 4rem;
     }
 
     .header {
+        z-index: 10;
         grid-column: 2 / 4;
         background-color: $third-color;
         color: $white;
@@ -252,5 +253,12 @@ $header-height: 4rem;
 
         overflow-y: scroll;
         max-height: calc(100vh - $header-height);
+    }
+}
+
+.wrapper {
+    .title {
+        margin-bottom: 2rem;
+        font-size: 2rem;
     }
 }

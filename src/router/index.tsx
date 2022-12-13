@@ -3,6 +3,7 @@ import Auth from "~/pages/auth";
 import Private from "~/router/Private";
 import Public from "~/router/Public";
 import Dashboard from "~/pages/dashboard";
+import Profile from "~/pages/profile";
 import Outer from "~/layouts/outer";
 import { Form as ListingForm, Index as ListingsIndex } from "~/pages/listings";
 import { Fallback as ErrorPage } from "@/error-boundary";
@@ -35,7 +36,7 @@ export const routes = [
 
             {
                 path: "profile",
-                element: <h1>Profile</h1>,
+                element: <Profile />,
                 name: "Profile",
             },
 
