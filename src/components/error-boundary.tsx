@@ -1,7 +1,7 @@
 import React from "react";
-import useTranslation from "~/hooks/useTranslation";
 import styles from "~/assets/scss/modules/boundary.module.scss";
 import ErrorSVG from "@/svg/Error";
+import Translate from "@/Translate";
 
 interface Props {
     children: React.ReactNode;
@@ -13,11 +13,9 @@ interface State {
 }
 
 export const Fallback: React.FC<{ message?: Numberish }> = ({ message = "Opps! Something went wrong" }) => {
-    const { Trans } = useTranslation();
-
     return (
         <div className={`${styles.boundary} ${styles.root}`}>
-            <Trans>{(t) => <p className={styles.content}> {t(message.toString())} </p>}</Trans>
+            <Translate>{(t) => <p className={styles.content}> {t(message.toString())} </p>}</Translate>
             <button className={styles.btn}>
                 <small className={styles.btnInner}>
                     <ErrorSVG />
