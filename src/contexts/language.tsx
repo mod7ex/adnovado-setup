@@ -1,10 +1,12 @@
-import React, { createContext } from "react";
+import { createContext } from "react";
 import { LANGUAGE_CONTEXT_DISPLAY_NAME } from "~/constants";
 import useTranslate from "~/i18n/hooks";
 
-type TranslationHook = Partial<ReturnType<typeof useTranslate>>;
+type TranslationHook = TRequired<Partial<ReturnType<typeof useTranslate>>, "i18n">;
 
-export const Language = createContext<TranslationHook>({});
+export const Language = createContext<TranslationHook>({
+    i18n: (v: string) => `${v}`,
+});
 
 Language.displayName = LANGUAGE_CONTEXT_DISPLAY_NAME;
 

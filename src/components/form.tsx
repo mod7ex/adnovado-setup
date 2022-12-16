@@ -19,7 +19,7 @@ export const FormSection: React.FC<RawProps> = ({ children, className, ...props 
 
 type FormProps = React.ComponentPropsWithoutRef<typeof RawForm>;
 
-type Props = FormProps & { disabled?: true; title?: React.ReactNode; footer?: React.ReactNode; cta: string };
+type Props = FormProps & { disabled?: true; title?: React.ReactNode; footer?: React.ReactNode; cta?: string };
 
 const Form: React.FC<Props> = ({ disabled, children, className, title, footer, cta, ...rest }) => {
     const _class = (className ?? "") + ` ${styles.root}`;

@@ -8,7 +8,7 @@ import Outer from "~/layouts/outer";
 import { Form as ListingForm, Index as ListingsIndex } from "~/pages/listings";
 import { Fallback as ErrorPage } from "@/error-boundary";
 
-const auth = true;
+const auth = false;
 
 export const routes = [
     {

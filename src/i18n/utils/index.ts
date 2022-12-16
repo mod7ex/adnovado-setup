@@ -7,13 +7,13 @@ export const load = async (lang: SUPPORTED_LANGS): Promise<LangDictionary | unde
     let payload;
 
     try {
-        payload = (await import(`../i18n/json/${lang}.json`)).default;
+        payload = (await import(`~/i18n/json/${lang}.json`)).default;
     } finally {
         if (payload) return payload;
     }
 
     try {
-        payload = (await import(`../i18n/json/${SUPPORTED_LANGS.ENGLISH}.json`)).default;
+        payload = (await import(`~/i18n/json/${SUPPORTED_LANGS.ENGLISH}.json`)).default;
     } catch {
         if (payload) return payload;
     }

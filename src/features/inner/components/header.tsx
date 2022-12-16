@@ -8,7 +8,7 @@ import { useRef } from "react";
 import useClickOutside from "~/hooks/useClickOutside";
 import Icon from "@/icon";
 import { ExternalImg } from "@/image";
-import useTranslation from "~/hooks/useTranslation";
+import { Language } from "~/contexts";
 
 type RawProps = React.ComponentPropsWithoutRef<"header">;
 
@@ -23,8 +23,6 @@ const FullScreenToggler = () => {
 };
 
 const ProfileNav = () => {
-    const { i18n: t } = useTranslation();
-
     const [collapsed, toggle] = useToggle(true);
 
     const nodeRef = useRef(null);
@@ -39,33 +37,37 @@ const ProfileNav = () => {
     );
 
     return (
-        <div className={styles.profile}>
-            <button ref={btnRef} onClick={(e) => toggle((v) => !v)}>
-                <ExternalImg width={40} height={40} src="https://placeimg.com/100/100/people" />
-            </button>
+        <Language.Consumer>
+            {({ i18n }) => (
+                <div className={styles.profile}>
+                    <button ref={btnRef} onClick={(e) => toggle((v) => !v)}>
+                        <ExternalImg width={40} height={40} src="https://placeimg.com/100/100/people" />
+                    </button>
 
-            {
-                <Transition nodeRef={nodeRef} in={!collapsed} timeout={125}>
-                    {(state) => (
-                        <nav ref={nodeRef} className={`${"show-up-and-fade"} show-up-and-fade__${state}`}>
-                            <p>Mourad EL CADI</p>
-                            <ul>
-                                <li>
-                                    <AppLink to={{ name: "Profile" }}>
-                                        <Icon name="profile" width={1} height={1} /> <p>{t("Profile Settings")}</p>
-                                    </AppLink>
-                                </li>
-                                <li>
-                                    <AppLink to={{ name: "Logout" }}>
-                                        <Icon name="sign-out" width={1} height={1} /> <p>{t("Sign Out")}</p>
-                                    </AppLink>
-                                </li>
-                            </ul>
-                        </nav>
-                    )}
-                </Transition>
-            }
-        </div>
+                    {
+                        <Transition nodeRef={nodeRef} in={!collapsed} timeout={125}>
+                            {(state) => (
+                                <nav ref={nodeRef} className={`${"show-up-and-fade"} show-up-and-fade__${state}`}>
+                                    <p>Mourad EL CADI</p>
+                                    <ul>
+                                        <li>
+                                            <AppLink to={{ name: "Profile" }}>
+                                                <Icon name="profile" width={1} height={1} /> <p>{i18n("Profile Settings")}</p>
+                                            </AppLink>
+                                        </li>
+                                        <li>
+                                            <AppLink to={{ name: "Logout" }}>
+                                                <Icon name="sign-out" width={1} height={1} /> <p>{i18n("Sign Out")}</p>
+                                            </AppLink>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            )}
+                        </Transition>
+                    }
+                </div>
+            )}
+        </Language.Consumer>
     );
 };
 

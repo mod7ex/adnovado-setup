@@ -19,8 +19,27 @@
 
     "public": {
         "auth": {
-            "login": "Sign in",
-            "signup": "Sign UP"
+            "login": {
+                "head": "Sign in",
+                "cta": "Sign in",
+                "credentials": {
+                    "username": "Username",
+                    "email": "E-mail"
+                },
+                "switch_process": "Don't have an account ?",
+                "remember": "Remember me"
+            },
+
+            "signup": {
+                "head": "Sign Up",
+                "cta": "Sign Up",
+                "data": {
+                    "username": "Username",
+                    "email": "E-mail"
+                },
+                "switch_process": "Don't have an account ?",
+                "remember": "Remember me"
+            }
         }
     }
 }

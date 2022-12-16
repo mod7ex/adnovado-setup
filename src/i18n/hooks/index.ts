@@ -3,6 +3,10 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { SUPPORTED_LANGS, LOCAL_STORAGE_LANGUAGE } from "~/constants";
 import { getNestedValue, recursionProxy, load, type LangDictionary } from "~/i18n/utils";
 
+import en from "~/i18n/json/en.json";
+
+type Dictionary = typeof en;
+
 const FALLBACK_MESSAGE = "______NOT_TRANSLATED______";
 
 const useTranslate = () => {
@@ -17,14 +21,16 @@ const useTranslate = () => {
     }, [lang]);
 
     const i18n = useCallback(
-        (key: string) => {
-            return getNestedValue(payload, key.split("."));
+        (key: string, fallback: string = "_") => {
+            return getNestedValue(payload, key.split(".")) || fallback;
         },
         [payload]
     );
 
-    const $t = useMemo<any>(() => {
-        return recursionProxy(payload, FALLBACK_MESSAGE);
+    // const i18n = (v: string) => `-${v}-`;
+
+    const $t = useMemo<Dictionary>(() => {
+        return recursionProxy<Dictionary>(payload as Dictionary, FALLBACK_MESSAGE);
     }, [payload]);
 
     return {

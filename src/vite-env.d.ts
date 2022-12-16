@@ -7,6 +7,8 @@ type ValueOrGenerator<T> = T | (() => T);
 // type ValueOrConcluder<T> = T extends Function ? never : T | ((v: T) => T);
 type ValueOrConcluder<T> = T | ((v: T) => T);
 
+type TRequired<T extends object, K extends keyof T> = { [P in Exclude<keyof T, K>]?: T[P] } & { [P in K]-?: T[P] };
+
 /* ************************************** *************** ************************************** */
 type Tfunction = (...args: any[]) => any;
 
