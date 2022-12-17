@@ -1,0 +1,10 @@
+{
+    "head": "Sign in",
+    "cta": "Sign in",
+    "credentials": {
+        "username": "Username",
+        "email": "E-mail"
+    },
+    "switch_process": "Don't have an account ?",
+    "remember": "Remember me"
+}

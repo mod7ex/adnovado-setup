@@ -42,3 +42,20 @@ export const recursionProxy = <T extends LangDictionary>(subject: T, fallback = 
             return _target ?? target[fbKey] ?? fallback;
         },
     });
+
+export const preferred_supported_language = () => {
+    /*
+     *
+     * Detect preferred language
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/Navigator/languages
+     * In the returned array they are ordered by preference with the most preferred language first.
+     */
+    for (let v of navigator.languages) {
+        const _language = v.substring(0, 2) as SUPPORTED_LANGS;
+
+        if (Object.values(SUPPORTED_LANGS).includes(_language)) return _language;
+    }
+
+    return SUPPORTED_LANGS.ENGLISH;
+};

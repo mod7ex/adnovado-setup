@@ -1,0 +1,15 @@
+{
+    "header": {
+        "profile": {
+            "settings": "Profile settings",
+            "logout": "Sign out"
+        }
+    },
+
+    "sidebar": {
+        "menu": {
+            "listings": "Listings",
+            "orders": "Orders"
+        }
+    }
+}

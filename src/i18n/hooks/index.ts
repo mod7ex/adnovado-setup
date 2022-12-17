@@ -1,24 +1,22 @@
-import useLocalStorage from "~/hooks/useLocalStorage";
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { SUPPORTED_LANGS, LOCAL_STORAGE_LANGUAGE } from "~/constants";
 import { getNestedValue, recursionProxy, load, type LangDictionary } from "~/i18n/utils";
 
-import en from "~/i18n/json/en.json";
+// "generate:locales": "quicktype person.json -o Person.ts" // https://quicktype.io/typescript
 
-type Dictionary = typeof en;
+import useLanguage from "~/i18n/hooks/useLanguage";
 
 const FALLBACK_MESSAGE = "______NOT_TRANSLATED______";
 
 const useTranslate = () => {
-    const [lang, set_lang] = useLocalStorage<SUPPORTED_LANGS>(LOCAL_STORAGE_LANGUAGE, SUPPORTED_LANGS.ENGLISH);
+    const [language, set_language] = useLanguage();
 
     const [payload, setPayload] = useState<LangDictionary>({});
 
     useEffect(() => {
-        load(lang).then((v) => {
+        load(language).then((v) => {
             v && setPayload(v);
         });
-    }, [lang]);
+    }, [language]);
 
     const i18n = useCallback(
         (key: string, fallback: string = "_") => {
@@ -29,13 +27,13 @@ const useTranslate = () => {
 
     // const i18n = (v: string) => `-${v}-`;
 
-    const $t = useMemo<Dictionary>(() => {
-        return recursionProxy<Dictionary>(payload as Dictionary, FALLBACK_MESSAGE);
+    const $t = useMemo<LangDictionary>(() => {
+        return recursionProxy<LangDictionary>(payload as LangDictionary, FALLBACK_MESSAGE);
     }, [payload]);
 
     return {
-        language: lang,
-        set_lang,
+        language,
+        set_language,
         i18n,
         $t,
     };

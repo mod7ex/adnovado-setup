@@ -5,4 +5,4 @@ export enum SUPPORTED_LANGS {
 
 export const LANGUAGE_CONTEXT_DISPLAY_NAME = "language_context";
 
-export const LOCAL_STORAGE_LANGUAGE = "language";
+export const LOCAL_STORAGE_LANGUAGE_KEY = "language";

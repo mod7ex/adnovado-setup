@@ -36,11 +36,11 @@ const Register: React.FC<Props> = ({ onSwitchProcess }) => {
             </FormSection>
 
             <FormSection>
-                <TextInput error="this is how error will show up here" type="password" id="password" name="password" label={i18n("password")} />
+                <TextInput error="this is how error will show up here" autoComplete="new-password" type="password" id="password" name="password" label={i18n("password")} />
             </FormSection>
 
             <FormSection>
-                <TextInput error="this is how error will show up here" type="password" id="password_confirmation" name="password_confirmation" label={i18n("password confirmation")} />
+                <TextInput error="this is how error will show up here" autoComplete="new-password" type="password" id="password_confirmation" name="password_confirmation" label={i18n("password confirmation")} />
             </FormSection>
 
             <FormSection className={styles.checkbox}>
