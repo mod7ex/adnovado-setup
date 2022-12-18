@@ -1,19 +1,22 @@
 import { isPlainObject } from "~/utils/types";
-import { SUPPORTED_LANGS } from "~/constants";
+import { trimChar } from "~/utils";
+import { SUPPORTED_LANGS, DICTIONARY_PARTIAL } from "~/constants";
 
 export type LangDictionary = SetFallback<ObjectOfNested<string>>;
 
-export const load = async (lang: SUPPORTED_LANGS): Promise<LangDictionary | undefined> => {
-    let payload;
+const raw_loader = <T>(lang: SUPPORTED_LANGS, partial: DICTIONARY_PARTIAL) => import(`~/i18n/locales/${lang}/${trimChar(partial, "/")}.json`) as Promise<{ default: T | undefined }>;
+
+export const load = async <T>(lang: SUPPORTED_LANGS, partial: DICTIONARY_PARTIAL): Promise<T | undefined> => {
+    let payload: T | undefined;
 
     try {
-        payload = (await import(`~/i18n/json/${lang}.json`)).default;
+        payload = (await raw_loader<T>(lang, partial)).default;
     } finally {
         if (payload) return payload;
     }
 
     try {
-        payload = (await import(`~/i18n/json/${SUPPORTED_LANGS.ENGLISH}.json`)).default;
+        payload = (await raw_loader<T>(SUPPORTED_LANGS.ENGLISH, partial)).default;
     } catch {
         if (payload) return payload;
     }
