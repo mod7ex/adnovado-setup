@@ -35,3 +35,11 @@ it's just like the src folder (but many folders are optional)
 -   or `monitorEvents($0, <event name> | <event name>[])` (verifying) once you finish use `unmonitorEvents` or refresh the page
 -   but before inspect the target element so you can have `$0` as your target
 -   Also it's possible to see event handlers in the `Elements > event Listners` tab
+
+---
+
+> https://www.eternaldev.com/blog/testing-a-react-application-with-vitest
+
+> https://www.linkedin.com/pulse/setting-up-rtl-vite-react-project-william-ku
+
+> https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd ------- 6
