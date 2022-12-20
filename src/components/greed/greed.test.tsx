@@ -2,6 +2,10 @@ import { Greed } from "@/greed";
 
 import { render, screen, userEvent } from "~/../test-utils";
 
+// describe('global', () => {
+
+// })
+
 test("Greed renders correctly", () => {
     render(<Greed />);
 

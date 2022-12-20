@@ -11,7 +11,7 @@ import router from "~/router";
 // }
 
 function App() {
-    return <h1>Hello Vite + React!</h1>;
+    return <h1>Hello Vite + React!!</h1>;
 }
 
 export default App;

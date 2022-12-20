@@ -7,7 +7,7 @@ import { render, screen, userEvent } from "../test-utils";
 test("the title is visible", () => {
     render(<App />);
 
-    const welcomeText = screen.getByText(/Hello Vite \+ React!/i);
+    const welcomeText = screen.getByText(/Hello Vite \+ React!!/i);
 
     // screen.debug(welcomeText);
 
