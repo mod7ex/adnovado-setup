@@ -17,7 +17,7 @@ test("Greed renders with a name", () => {
 
     render(<Greed name={name} />);
 
-    const txtElement = screen.getByText(`Greed ${name}`);
+    const txtElement = screen.getByText(`Greed ${name} (:`);
 
     screen.debug(txtElement);
 
