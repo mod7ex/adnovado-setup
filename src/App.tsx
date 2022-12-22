@@ -1,17 +1,13 @@
 import { RouterProvider } from "react-router-dom";
-import { LanguageProvider } from "~/contexts";
 import router from "~/router";
-
-// function App() {
-//     return (
-//         <LanguageProvider>
-//             <RouterProvider router={router} />
-//         </LanguageProvider>
-//     );
-// }
+// import GreetAll from "@/greet-all";
 
 function App() {
-    return <h1>Hello Vite + React!!</h1>;
+    return <RouterProvider router={router} />;
 }
+
+// function App() {
+//     return <GreetAll skills={["ar", "fr", "en"]} />;
+// }
 
 export default App;
