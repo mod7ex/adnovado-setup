@@ -12,7 +12,7 @@ export const Language = createContext<ContextPayload>({
 
 Language.displayName = LANGUAGE_CONTEXT_DISPLAY_NAME;
 
-const LanguageProvider: React.FC<{ children: React.ReactNode; partial: DICTIONARY_PARTIAL }> = ({ children, partial }) => {
+const LanguageProvider: React.FC<{ children: React.ComponentProps<React.Provider<ContextPayload>>["children"]; partial: DICTIONARY_PARTIAL }> = ({ children, partial }) => {
     const [language, set_language] = useLanguage();
 
     const dictionary = useDictionary(language, partial);

@@ -34,13 +34,13 @@ describe("Greet All", () => {
     it("Start learning button is eventually displayed", async () => {
         const view = render(<GreetAll skills={skills} />);
 
-        // logRoles(view.container);
+        logRoles(view.container);
 
-        screen.debug();
+        // screen.debug();
 
         const startLearningBTN = await screen.findByRole("button", { name: /learning/ }, { timeout: 2000 });
         expect(startLearningBTN).toBeInTheDocument();
 
-        screen.debug();
+        // screen.debug();
     });
 });

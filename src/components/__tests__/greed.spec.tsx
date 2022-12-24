@@ -20,7 +20,7 @@ describe("Greet", () => {
         const button = screen.getByRole("button");
         expect(button).toBeInTheDocument();
 
-        const bioEl = screen.getByRole("textbox", { name: "Bio", exact: false });
+        const bioEl = screen.getByRole("textbox", { name: "Bio" });
         expect(bioEl).toBeInTheDocument();
 
         const pageHeading = screen.getByRole("heading", { level: 1 });
@@ -33,8 +33,8 @@ describe("Greet", () => {
     it("Get by label text", () => {
         render(<Greet />);
 
-        const nameEl = screen.getByLabelText("Name", { selector: "input" });
-        expect(nameEl).toBeInTheDocument();
+        const el = screen.getByLabelText("Name", { selector: "input" });
+        expect(el).toBeInTheDocument();
 
         const termsEl = screen.getByLabelText(/agree/);
         expect(termsEl).toBeInTheDocument();
@@ -43,42 +43,42 @@ describe("Greet", () => {
     it("Get by label placeholder text", () => {
         render(<Greet />);
 
-        const nameEl = screen.getByPlaceholderText("full name", { exact: false });
-        expect(nameEl).toBeInTheDocument();
+        const el = screen.getByPlaceholderText("full name", { exact: false });
+        expect(el).toBeInTheDocument();
     });
 
     it("Get by text", () => {
         render(<Greet />);
 
-        const nameEl = screen.getByText("All fields are mandatory");
-        expect(nameEl).toBeInTheDocument();
+        const el = screen.getByText("All fields are mandatory");
+        expect(el).toBeInTheDocument();
     });
 
     it("Get by display value", () => {
         render(<Greet />);
 
-        const nameEl = screen.getByDisplayValue((v) => v.startsWith("Mour"));
-        expect(nameEl).toBeInTheDocument();
+        const el = screen.getByDisplayValue((v) => v.startsWith("Mour"));
+        expect(el).toBeInTheDocument();
     });
 
     it("Get by alt text", () => {
         render(<Greet />);
 
-        const nameEl = screen.getByAltText("some alt");
-        expect(nameEl).toBeInTheDocument();
+        const el = screen.getByAltText("some alt");
+        expect(el).toBeInTheDocument();
     });
 
     it("Get by title", () => {
         render(<Greet />);
 
-        const closeEl = screen.getByTitle("close");
-        expect(closeEl).toBeInTheDocument();
+        const el = screen.getByTitle(/close/);
+        expect(el).toBeInTheDocument();
     });
 
     it("Get by test id", () => {
         render(<Greet />);
 
-        const customEl = screen.getByTestId("custom-el");
-        expect(customEl).toBeInTheDocument();
+        const el = screen.getByTestId("custom-el");
+        expect(el).toBeInTheDocument();
     });
 });

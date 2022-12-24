@@ -8,14 +8,14 @@ const Greet = () => {
 
             <span title="close">Close</span>
 
-            <img src="..." alt="some alt" />
+            <img src="" alt="some alt" height={300} width={300} />
 
             <div data-testid="custom-el">Custom HTML element</div>
 
             <form>
                 <div>
                     <label htmlFor="l_name">
-                        <input id="l_name" type="text" placeholder="Full name" value="Mourad" readOnly /> Name
+                        <input id="l_name" type="text" placeholder="Full name" value="Mourad" onChange={() => {}} /> Name
                     </label>
                 </div>
 
