@@ -13,8 +13,9 @@ export default function useLocalStorage<T>(key: string, _default_value: ValueOrG
     const deferredValue = useDeferredValue(value);
 
     useEffect(() => {
-        if (deferredValue == null) return;
+        if (deferredValue == null) return localStorage.removeItem(key);
         localStorage.setItem(key, JSON.stringify(deferredValue));
+
         if (import.meta.env.DEV) console.log("saved in local storage");
     }, [deferredValue]);
 

@@ -42,4 +42,4 @@ it's just like the src folder (but many folders are optional)
 
 > https://www.linkedin.com/pulse/setting-up-rtl-vite-react-project-william-ku
 
-> https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd ------- 37 || https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosM-dzuvQ
+> https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd ------- 42 || https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosM-dzuvQ
