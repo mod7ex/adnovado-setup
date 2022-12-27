@@ -52,6 +52,7 @@ const Button: React.FC<Props> = ({ classes = styles, left, right, className, dis
     const _right = isObject(right) ? right : right == null ? null : <p>{right}</p>;
 
     let _class = (className ?? "") + ` ${classes.root}`;
+
     // size
     if ("small" in props) _class += ` ${classes.small}`;
     if ("large" in props) _class += ` ${classes.large}`;

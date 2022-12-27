@@ -1,6 +1,6 @@
-import GreetAll, { type Skills } from "@/greet-all";
+import GreetAll from "@/greet-all";
 
-import { render, screen, logRoles } from "~/../test-utils";
+import { render, screen /* , logRoles */ } from "~/../test-utils";
 
 describe("Greet All", () => {
     const skills = ["HTML", "CSS", "JS"];
@@ -34,7 +34,7 @@ describe("Greet All", () => {
     it("Start learning button is eventually displayed", async () => {
         const view = render(<GreetAll skills={skills} />);
 
-        logRoles(view.container);
+        // logRoles(view.container);
 
         // screen.debug();
 

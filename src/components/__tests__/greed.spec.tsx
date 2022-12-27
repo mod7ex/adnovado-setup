@@ -1,5 +1,4 @@
 import Greet from "~/components/greet";
-
 import { render, screen } from "~/../test-utils";
 
 describe("Greet", () => {

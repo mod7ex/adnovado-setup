@@ -46,7 +46,7 @@ describe("Button", () => {
 
         const _active_classes = [random_items_from_array(SIZES), random_items_from_array(TYPES)].flat();
 
-        const CLASSES = _CLASSES.reduce((prev, curr) => ({ ...prev, [curr]: curr }), { root: "root" });
+        const CLASSES = [..._CLASSES, "root"].reduce((prev, curr) => ({ ...prev, [curr]: curr }), {});
 
         const active_classes = { [_active_classes[0]]: true, [_active_classes[1]]: true };
 
@@ -55,7 +55,5 @@ describe("Button", () => {
         const button = screen.getByRole("button");
 
         expect(button).toHaveClass("root", ..._active_classes);
-
-        screen.debug();
     });
 });

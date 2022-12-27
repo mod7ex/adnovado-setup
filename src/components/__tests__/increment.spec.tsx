@@ -117,8 +117,8 @@ it("text area", async () => {
     await user.keyboard("{Control>}A{/Control} ");
     expect(textAreaEl).toHaveValue(" ");
 
-    /* 
+    /*
     await user.clear(textAreaEl);
     expect(textAreaEl).toHaveValue("");
-*/
+    */
 });
