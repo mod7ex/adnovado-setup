@@ -2,6 +2,8 @@ import Users from "@/http-mock";
 import { render, screen } from "~/../test-utils";
 import { users } from "~/mocks/handlers";
 
+// https://testing-library.com/docs/react-testing-library/example-intro/#mock
+
 describe("Users", () => {
     test("renders correctly", async () => {
         render(<Users />);

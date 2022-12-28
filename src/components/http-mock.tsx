@@ -1,4 +1,4 @@
-import useAsync from "~/hooks/useAsync";
+import { useEffect, useState } from "react";
 
 type User = {
     id: number;
@@ -25,21 +25,24 @@ type User = {
 };
 
 const Http = () => {
-    const { value, error, pending } = useAsync<User[]>(async () => {
-        const res = await fetch("https://jsonplaceholder.typicode.com/users");
-        return await res.json();
-    });
+    const [users, setUsers] = useState<User[]>([]);
+    const [error, setError] = useState<string | null>();
 
-    if (pending) return <p>loading ...</p>;
+    useEffect(() => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then((res) => res.json())
+            .then((data) => setUsers(data))
+            .catch(() => setError("Something went wrong !"));
+    }, []);
 
-    if (error) return <p>{JSON.stringify(error, null, 2)}</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <div>
             <h1>Users</h1>
 
             <ul>
-                {value?.map(({ name, id }) => (
+                {users?.map(({ name, id }) => (
                     <li key={id}>{name}</li>
                 ))}
             </ul>
