@@ -1,3 +1,5 @@
+# Folder structure
+
 > the idea behind the folder `lib` is implementing the FACADE pattern
 
 > the idea behind the folder `services` is integration with APIs (login ...)
@@ -27,8 +29,6 @@ it's just like the src folder (but many folders are optional)
 
 ---
 
----
-
 # Debugging Events
 
 -   You can see event handlers in console using `getEventListeners($0)`
@@ -38,8 +38,10 @@ it's just like the src folder (but many folders are optional)
 
 ---
 
+# Vitest
+
 > https://www.eternaldev.com/blog/testing-a-react-application-with-vitest
 
 > https://www.linkedin.com/pulse/setting-up-rtl-vite-react-project-william-ku
 
-> https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd ------- 46 || https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosM-dzuvQ
+> https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd | 49
