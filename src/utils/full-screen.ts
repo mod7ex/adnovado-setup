@@ -1,7 +1,3 @@
-const fail = <T extends string>(msg: T) => {
-    throw Error(msg);
-};
-
 export function open() {
     const el = document.documentElement;
 

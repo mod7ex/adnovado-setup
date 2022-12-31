@@ -12,6 +12,10 @@ type TRequired<T extends object, K extends keyof T> = { [P in Exclude<keyof T, K
 /* ************************************** *************** ************************************** */
 type Tfunction = (...args: any[]) => any;
 
+type AsyncFunction = (...args: any[]) => Promise<any>;
+
+type PromiseType<P extends Promise<any>> = P extends Promise<infer T> ? T : never;
+
 type Numberish = string | number;
 
 type TEmpty = undefined | null;

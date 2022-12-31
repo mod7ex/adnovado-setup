@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, type DependencyList } from "react";
 import useToggle from "~/hooks/useToggle";
+import { logger } from "~/utils";
 
-export default function useAsync<T, Er = unknown>(cb: () => Promise<T>, dependecies: any[] = []) {
+export default function useAsync<T, Er = unknown>(fn: () => Promise<T>, dependecies: DependencyList = []) {
     const [pending, toggle] = useToggle(false);
     const [value, setValue] = useState<T | TEmpty>(undefined);
     const [error, setError] = useState<Er | TEmpty>(undefined);
@@ -11,13 +12,13 @@ export default function useAsync<T, Er = unknown>(cb: () => Promise<T>, dependec
         setError(undefined);
         setValue(undefined);
 
-        cb()
+        fn()
             .then((v) => {
                 setValue(v);
                 setError(undefined);
             })
             .catch((v: Er) => {
-                if (import.meta.env.DEV) console.error(v);
+                logger.strict_dev_log(v);
                 setValue(undefined);
                 setError(v);
             })

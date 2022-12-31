@@ -1,16 +1,44 @@
 import useLocalStorage from "~/hooks/useLocalStorage";
 import { renderHook, act } from "~/../test-utils";
+import { LOCAL_STORAGE_DEFAULTS } from "~/mocks/utils";
 
-describe("useCounter", () => {
-    it("toggles correctly", () => {
-        const { result } = renderHook(() => useLocalStorage("theme", false));
+enum TEST {
+    FIRST = "first value ...",
+    SECOND = "second value ...",
+}
 
-        expect(result.current[0]).toBe(false);
+describe("useLocalStorage", () => {
+    it("uses the values found in localStorage by default", () => {
+        const { result } = renderHook(() => useLocalStorage(LOCAL_STORAGE_DEFAULTS.KEY, "anything"));
+
+        expect(result.current[0]).toBe(LOCAL_STORAGE_DEFAULTS.VALUE);
 
         act(() => {
-            result.current[1](true);
+            result.current[1](TEST.FIRST);
         });
 
-        expect(result.current[0]).toBe(true);
+        expect(result.current[0]).toBe(TEST.FIRST);
+
+        const value_stored_in_localstorage = localStorage.getItem(LOCAL_STORAGE_DEFAULTS.KEY)!;
+
+        expect(JSON.parse(value_stored_in_localstorage)).toEqual(TEST.FIRST);
+    });
+
+    it("changes correctly", () => {
+        const KEY = "key";
+
+        const { result } = renderHook(() => useLocalStorage(KEY, TEST.FIRST));
+
+        expect(result.current[0]).toBe(TEST.FIRST);
+
+        act(() => {
+            result.current[1](TEST.SECOND);
+        });
+
+        expect(result.current[0]).toBe(TEST.SECOND);
+
+        const value_stored_in_localstorage = localStorage.getItem(KEY)!;
+
+        expect(JSON.parse(value_stored_in_localstorage)).toEqual(TEST.SECOND);
     });
 });

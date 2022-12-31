@@ -45,3 +45,7 @@ it's just like the src folder (but many folders are optional)
 > https://www.linkedin.com/pulse/setting-up-rtl-vite-react-project-william-ku
 
 > https://youtube.com/playlist?list=PLC3y8-rFHvwirqe1KHFCHJ0RqNuN61SJd | 49
+
+# React hooks
+
+> https://github.com/streamich/react-use
