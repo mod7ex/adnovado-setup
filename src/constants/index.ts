@@ -16,3 +16,10 @@ export enum DICTIONARY_PARTIAL {
 export const LANGUAGE_CONTEXT_DISPLAY_NAME = "language_context";
 
 export const LOCAL_STORAGE_LANGUAGE_KEY = "language";
+
+export const MODE = {
+    TEST: import.meta.env.TEST_MODE === "true",
+    PROD: import.meta.env.PROD,
+    DEV: import.meta.env.DEV,
+    STRICT_DEV: import.meta.env.DEV && !(import.meta.env.TEST_MODE === "true"),
+};

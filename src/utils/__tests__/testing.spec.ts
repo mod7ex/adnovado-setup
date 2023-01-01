@@ -1,6 +1,6 @@
 import { random_items_from_array } from "~/utils/testing";
 
-it("works correctly", () => {
+it("random_items_from_array", () => {
     const items = ["a", "b", "c", "d", "e"];
 
     expect(random_items_from_array(items).length).toBe(1);

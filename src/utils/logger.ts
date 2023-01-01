@@ -1,11 +1,8 @@
+import { MODE } from "~/constants";
+
 const log = console.log;
 const warn = console.warn;
 const error = console.error;
-
-const IS_TEST_MODE = import.meta.env.TEST_MODE === "true";
-const IS_PROD_MODE = import.meta.env.PROD;
-const IS_DEV_MODE = import.meta.env.DEV;
-const IS_STRICT_DEV_MODE = IS_DEV_MODE && !IS_TEST_MODE;
 
 type LogArgs = Parameters<typeof log>;
 type WarnArgs = Parameters<typeof warn>;
@@ -25,19 +22,19 @@ class Logger {
     }
 
     test_log(...args: LogArgs) {
-        if (IS_TEST_MODE) this.log(...args);
+        if (MODE.TEST) this.log(...args);
     }
 
     dev_log(...args: LogArgs) {
-        if (IS_DEV_MODE) this.log(...args);
+        if (MODE.DEV) this.log(...args);
     }
 
     strict_dev_log(...args: LogArgs) {
-        if (IS_STRICT_DEV_MODE) this.log(...args);
+        if (MODE.STRICT_DEV) this.log(...args);
     }
 
     prod_log(...args: LogArgs) {
-        if (IS_PROD_MODE) this.log(...args);
+        if (MODE.PROD) this.log(...args);
     }
 
     error(...args: ErrorArgs) {

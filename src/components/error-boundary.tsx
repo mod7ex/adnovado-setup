@@ -2,6 +2,7 @@ import React from "react";
 import styles from "~/assets/scss/modules/boundary.module.scss";
 import ErrorSVG from "@/svg/Error";
 import Translate from "@/Translate";
+import { logger } from "~/utils";
 
 interface Props {
     children: React.ReactNode;
@@ -40,10 +41,12 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     componentDidCatch(error: unknown, errorInfo: any) {
         // You can also log the error to an error reporting service
         // logErrorToMyService(error, errorInfo);
-        import.meta.env.DEV && console.log(error, errorInfo);
+        logger.dev_log(error, errorInfo);
     }
 
     render() {
-        return this.state.hasError ? this.props.fallback ?? <Fallback /> : this.props.children;
+        if (this.state.hasError) return this.props.fallback ?? <Fallback />;
+
+        return this.props.children;
     }
 }

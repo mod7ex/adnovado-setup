@@ -14,6 +14,23 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return <Context.Provider value={{ theme, set_theme }}>{children}</Context.Provider>;
 };
 
+/*
+const App = () => {
+    // const { theme, set_theme } = useTheme();
+
+    return (
+        <Context.Consumer>
+            {({ theme, set_theme }) => (
+                <>
+                    <h1>theme {theme ? "dark" : "light"}</h1>
+                    <button onClick={() => set_theme!((v) => !v)}>switch theme</button>
+                </>
+            )}
+        </Context.Consumer>
+    );
+};
+*/
+
 const App = () => {
     const { theme, set_theme } = useTheme();
 

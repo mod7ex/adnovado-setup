@@ -42,3 +42,5 @@ export class LocalStorageMock {
         return _key;
     }
 }
+
+export { createMemoryRouter as createRouter } from "react-router-dom";
