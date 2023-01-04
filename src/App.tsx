@@ -1,21 +1,15 @@
-import ErrorBoundary from "@/error-boundary";
-import { RouterProvider } from "~/contexts";
-// import Context, { ThemeProvider } from "@/context";
+import { ErrorBoundary } from "@/error";
+import Provider from "~/contexts";
+import { StrictMode } from "react";
 
 function App() {
     return (
-        <ErrorBoundary>
-            <RouterProvider />
-        </ErrorBoundary>
+        <StrictMode>
+            <ErrorBoundary>
+                <Provider />
+            </ErrorBoundary>
+        </StrictMode>
     );
 }
-
-// function App() {
-//     return (
-//         <ThemeProvider>
-//             <Context />
-//         </ThemeProvider>
-//     );
-// }
 
 export default App;

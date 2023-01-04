@@ -31,8 +31,8 @@ const products = [
 const Index = () => {
     return (
         <div className={styles.container}>
-            {products.map(({ name, price }) => (
-                <Product name={name} price={price} />
+            {products.map(({ name, price }, index) => (
+                <Product name={name} price={price} key={index} />
             ))}
         </div>
     );

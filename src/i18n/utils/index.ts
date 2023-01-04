@@ -1,28 +1,84 @@
 import { isPlainObject } from "~/utils/types";
 import { trimChar } from "~/utils";
-import { SUPPORTED_LANGS, DICTIONARY_PARTIAL } from "~/constants";
 
-export type LangDictionary = SetFallback<ObjectOfNested<string>>;
+export enum SUPPORTED_LANGUAGES {
+    ENGLISH = "en",
+    FRENCH = "fr",
+}
 
-const raw_loader = <T>(lang: SUPPORTED_LANGS, partial: DICTIONARY_PARTIAL) => import(`~/i18n/locales/${lang}/${trimChar(partial, "/")}.json`) as Promise<{ default: T | undefined }>;
+/**
+ * dictionary inside '~/i18n/locales/en/**' without <.json>
+ */
+const DICTIONARY_NAMESPACE = {
+    AUTH: { page: "Auth", namespace: "auth" },
+    INNER: { namespace: "inner" },
+    COMMON: { namespace: "common" },
+    PAGE_DASHBOARD: { page: "Dashboard", namespace: "pages/dashboard" },
+} as const;
 
-export const load = async <T>(lang: SUPPORTED_LANGS, partial: DICTIONARY_PARTIAL): Promise<T | undefined> => {
+export enum DICTIONARY_NAMESPACES {
+    AUTH = "auth",
+    INNER = "inner",
+    COMMON = "common",
+    PAGE_DASHBOARD = "pages/dashboard",
+}
+
+// export type DICTIONARY_NAMESPACES = typeof DICTIONARY_NAMESPACE extends Record<string, { namespace: infer D }> ? D : never;
+
+export const LANGUAGE_CONTEXT_DISPLAY_NAME = "language_context";
+
+export const LOCAL_STORAGE_LANGUAGE_KEY = "language";
+
+export type NAMESPACE_PAYLOAD = SetFallback<ObjectOfNested<string>>;
+
+const raw_loader = <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => import(`~/i18n/locales/${lang}/${trimChar(name_space, "/")}.json`) as Promise<{ default: T | undefined }>;
+
+export const load = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES): Promise<T | undefined> => {
     let payload: T | undefined;
 
     try {
-        payload = (await raw_loader<T>(lang, partial)).default;
+        payload = (await raw_loader<T>(lang, name_space)).default;
     } finally {
         if (payload) return payload;
     }
 
     try {
-        payload = (await raw_loader<T>(SUPPORTED_LANGS.ENGLISH, partial)).default;
-    } catch {
+        payload = (await raw_loader<T>(SUPPORTED_LANGUAGES.ENGLISH, name_space)).default;
+    } finally {
         if (payload) return payload;
     }
 };
 
-export function getNestedValue<T extends LangDictionary>(target: T, keys: string[]): string {
+export const preferred_supported_language = () => {
+    /*
+     *
+     * Detect preferred language
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/Navigator/languages
+     * In the returned array they are ordered by preference with the most preferred language first.
+     */
+    for (let v of navigator.languages) {
+        const _language = v.substring(0, 2) as SUPPORTED_LANGUAGES;
+
+        if (Object.values(SUPPORTED_LANGUAGES).includes(_language)) return _language;
+    }
+
+    return SUPPORTED_LANGUAGES.ENGLISH;
+};
+
+export const current_language = () => {
+    let _language = localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY);
+
+    if (!_language) {
+        _language = preferred_supported_language();
+
+        localStorage;
+    }
+
+    return JSON.parse(_language) as SUPPORTED_LANGUAGES;
+};
+
+export function getNestedValue<T extends NAMESPACE_PAYLOAD>(target: T, keys: string[]): string {
     if (keys.length === 0) return "";
 
     const [x, ..._keys] = keys;
@@ -34,7 +90,7 @@ export function getNestedValue<T extends LangDictionary>(target: T, keys: string
     return _target ?? "";
 }
 
-export const recursionProxy = <T extends LangDictionary>(subject: T, fallback = "", fbKey = "_"): T =>
+export const recursionProxy = <T extends NAMESPACE_PAYLOAD>(subject: T, fallback = "", fbKey = "_"): T =>
     new Proxy(subject, {
         get(target, key: string & keyof T) {
             const _target = target[key];
@@ -46,19 +102,112 @@ export const recursionProxy = <T extends LangDictionary>(subject: T, fallback = 
         },
     });
 
-export const preferred_supported_language = () => {
-    /*
-     *
-     * Detect preferred language
-     *
-     * https://developer.mozilla.org/en-US/docs/Web/API/Navigator/languages
-     * In the returned array they are ordered by preference with the most preferred language first.
-     */
-    for (let v of navigator.languages) {
-        const _language = v.substring(0, 2) as SUPPORTED_LANGS;
+// --------------------------------------- i18n implementation ---------------------------------------
 
-        if (Object.values(SUPPORTED_LANGS).includes(_language)) return _language;
+class Language {
+    static instance?: Language;
+
+    private state?: SUPPORTED_LANGUAGES;
+
+    constructor() {
+        if (!Language.instance) {
+            this.state = this.load();
+
+            Language.instance = this;
+        }
+
+        return Language.instance;
     }
 
-    return SUPPORTED_LANGS.ENGLISH;
-};
+    private load() {
+        let _language = localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY);
+
+        if (!_language) {
+            _language = preferred_supported_language();
+
+            localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, _language);
+        } else {
+            _language = JSON.parse(_language);
+        }
+
+        return _language as SUPPORTED_LANGUAGES;
+    }
+
+    set(v: SUPPORTED_LANGUAGES) {
+        localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, v);
+
+        this.state = v;
+
+        return this;
+    }
+
+    get() {
+        return this.state!;
+    }
+}
+
+class Dictionary {
+    static instance?: Dictionary;
+
+    private state?: Map<SUPPORTED_LANGUAGES, { [K in DICTIONARY_NAMESPACES]?: NAMESPACE_PAYLOAD }>;
+
+    constructor(private readonly _language: Readonly<Language>) {
+        if (!Dictionary.instance) {
+            this.state = new Map();
+
+            Dictionary.instance = this;
+        }
+
+        return Dictionary.instance;
+    }
+
+    get language() {
+        return this._language.get();
+    }
+
+    set_language(v: SUPPORTED_LANGUAGES) {
+        this._language.set(v);
+    }
+
+    set(name_space: DICTIONARY_NAMESPACES, name_space_payload: NAMESPACE_PAYLOAD) {
+        const _language = this.language;
+
+        let _dictionary = this.state!.get(_language);
+
+        if (!_dictionary) {
+            this.state!.set(_language, { [name_space]: name_space_payload });
+            return;
+        }
+
+        if (name_space in _dictionary) return;
+
+        _dictionary[name_space] = name_space_payload;
+    }
+
+    get(name_space: DICTIONARY_NAMESPACES): NAMESPACE_PAYLOAD | undefined {
+        const _dictionary = this.state!.get(this.language);
+        if (_dictionary) return _dictionary[name_space];
+    }
+
+    async load(name_space: DICTIONARY_NAMESPACES): Promise<NAMESPACE_PAYLOAD | never> {
+        let payload = this.get(name_space);
+
+        if (!payload) {
+            payload = await load<NAMESPACE_PAYLOAD>(this.language, name_space);
+
+            if (!payload) throw Error("Couldn't load translation");
+
+            this.set(name_space, payload);
+        }
+
+        return payload;
+    }
+
+    clear() {
+        this.state!.clear();
+    }
+}
+
+export const $language = Object.freeze(new Language());
+
+export const $dictionary = Object.freeze(new Dictionary($language));

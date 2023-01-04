@@ -27,7 +27,7 @@ const Icon: React.FC<Props> = ({ name, height = 1.2, width = 1.2, disabled, ...r
 
     let inner;
 
-    if (disabled) inner = <></>;
+    if (disabled) inner = null;
     else if (pending) inner = <>&#x21bb;</>; /* <>&#8226;&#8226;&#8226;</> */
     else if (error) inner = <>&#9888;</>;
     else {

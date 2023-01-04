@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
-import { default as raw_router } from "~/router";
+import router from "~/router";
 
-const Provider: React.FC<{ router?: typeof raw_router }> = ({ router = raw_router }) => {
+const Provider = () => {
     return <RouterProvider router={router} />;
 };
 

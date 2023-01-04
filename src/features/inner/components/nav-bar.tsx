@@ -1,7 +1,7 @@
 import { AppLink, AppNavLink } from "~/router/components";
 import styles from "~/assets/scss/modules/inner.module.scss";
 import Icon from "~/components/icon";
-import { Language } from "~/contexts";
+import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
 
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
@@ -26,7 +26,7 @@ const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disab
 
 const NavBar: React.FC<RawProps> = ({ ...props }) => {
     return (
-        <Language.Consumer>
+        <Translate ns={DICTIONARY_NAMESPACES.INNER}>
             {({ i18n }) => (
                 <nav {...props}>
                     <div className={styles.logo}>
@@ -55,7 +55,7 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                     </div>
                 </nav>
             )}
-        </Language.Consumer>
+        </Translate>
     );
 };
 

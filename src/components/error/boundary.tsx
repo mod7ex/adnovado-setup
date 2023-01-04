@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "~/assets/scss/modules/boundary.module.scss";
 import ErrorSVG from "@/svg/Error";
-import Translate from "@/Translate";
+import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
 import { logger } from "~/utils";
 
 interface Props {
@@ -13,10 +13,10 @@ interface State {
     hasError: boolean;
 }
 
-export const Fallback: React.FC<{ message?: Numberish }> = ({ message = "Opps! Something went wrong" }) => {
+export const Fallback: React.FC<{ message?: string }> = ({ message = "Opps! Something went wrong" }) => {
     return (
         <div className={`${styles.boundary} ${styles.root}`}>
-            <Translate>{(t) => <p className={styles.content}> {t(message.toString())} </p>}</Translate>
+            <Translate ns={DICTIONARY_NAMESPACES.COMMON}>{({ i18n }) => <p className={styles.content}> {i18n(message)} </p>}</Translate>
             <button className={styles.btn}>
                 <small className={styles.btnInner}>
                     <ErrorSVG />
@@ -26,7 +26,7 @@ export const Fallback: React.FC<{ message?: Numberish }> = ({ message = "Opps! S
     );
 };
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+class ErrorBoundary extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
@@ -45,8 +45,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     }
 
     render() {
-        if (this.state.hasError) return this.props.fallback ?? <Fallback />;
-
-        return this.props.children;
+        return this.state.hasError ? this.props.fallback ?? <Fallback /> : this.props.children;
     }
 }
+
+export default ErrorBoundary;

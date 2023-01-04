@@ -1,5 +1,5 @@
 import Increment from "@/increment";
-import { render, screen, logRoles } from "~/../test-utils";
+import { render, screen } from "~/../test-utils";
 import user from "@testing-library/user-event";
 
 it("renders correctly", () => {

@@ -1,4 +1,3 @@
-import { MODE } from "~/constants";
 import { routes } from "~/router";
 import { app_join } from "~/utils";
 
@@ -68,5 +67,3 @@ export const resolve_payload = (payload: ITo) => {
 
     return _path;
 };
-
-console.log(MODE.TEST);

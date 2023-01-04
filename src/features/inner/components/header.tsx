@@ -8,7 +8,7 @@ import { useRef } from "react";
 import useClickOutside from "~/hooks/useClickOutside";
 import Icon from "@/icon";
 import { ExternalImg } from "@/image";
-import { Language } from "~/contexts";
+import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
 
 type RawProps = React.ComponentPropsWithoutRef<"header">;
 
@@ -37,7 +37,7 @@ const ProfileNav = () => {
     );
 
     return (
-        <Language.Consumer>
+        <Translate ns={DICTIONARY_NAMESPACES.INNER}>
             {({ i18n }) => (
                 <div className={styles.profile}>
                     <button ref={btnRef} onClick={(e) => toggle((v) => !v)}>
@@ -67,7 +67,7 @@ const ProfileNav = () => {
                     }
                 </div>
             )}
-        </Language.Consumer>
+        </Translate>
     );
 };
 

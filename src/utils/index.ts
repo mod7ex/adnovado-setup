@@ -63,5 +63,32 @@ export const timeOut = () => {
     return { set, clear, reset };
 };
 
+export const trace = () => {
+    let _pst = Error.prepareStackTrace;
+
+    let _caller_file = "";
+    try {
+        const err = new Error();
+        let currentfile;
+
+        Error.prepareStackTrace = (_, stack) => stack;
+
+        // @ts-ignore
+        currentfile = err.stack.shift().getFileName();
+
+        // @ts-ignore
+        while (err.stack.length) {
+            // @ts-ignore
+            _caller_file = err.stack.shift().getFileName();
+
+            if (currentfile !== _caller_file) break;
+        }
+    } finally {
+        Error.prepareStackTrace = _pst;
+
+        return _caller_file;
+    }
+};
+
 export { close, open } from "~/utils/full-screen";
 export { default as logger } from "~/utils/logger";

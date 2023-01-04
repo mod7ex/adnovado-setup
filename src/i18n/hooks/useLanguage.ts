@@ -1,9 +1,15 @@
-import useLocalStorage from "~/hooks/useLocalStorage";
-import { SUPPORTED_LANGS, LOCAL_STORAGE_LANGUAGE_KEY } from "~/constants";
-import { preferred_supported_language } from "~/i18n/utils";
+import { useCallback, useState, type DependencyList } from "react";
+import { $language, type SUPPORTED_LANGUAGES } from "~/i18n";
 
-const useLanguage = () => {
-    return useLocalStorage<SUPPORTED_LANGS>(LOCAL_STORAGE_LANGUAGE_KEY, preferred_supported_language);
+const useLanguage = (dependencies: DependencyList = []) => {
+    const [language, _set] = useState($language.get());
+
+    const set_language = useCallback((language: SUPPORTED_LANGUAGES) => {
+        _set(language);
+        $language.set(language);
+    }, dependencies);
+
+    return { language, set_language };
 };
 
 export default useLanguage;

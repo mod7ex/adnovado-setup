@@ -2,14 +2,13 @@ import { default as Form, FormSection } from "@/form";
 import TextInput from "@/text-input";
 import CheckBox from "@/check-box";
 import Link from "@/link";
-import { useContext } from "react";
 import styles from "~/assets/scss/modules/auth.module.scss";
-import { Language } from "~/contexts";
+import { useTranslate, DICTIONARY_NAMESPACES } from "~/i18n";
 
 type Props = { onSwitchProcess: (e: React.MouseEvent) => void };
 
 const Register: React.FC<Props> = ({ onSwitchProcess }) => {
-    const { i18n } = useContext(Language);
+    const { i18n } = useTranslate(DICTIONARY_NAMESPACES.AUTH);
 
     const footer = (
         <Link to="#" onClick={onSwitchProcess}>
