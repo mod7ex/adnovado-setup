@@ -9,7 +9,9 @@
     "sidebar": {
         "menu": {
             "listings": "Listings",
-            "orders": "Orders"
+            "orders": "Orders",
+            "settings": "Settings",
+            "help": "Help"
         }
     }
 }

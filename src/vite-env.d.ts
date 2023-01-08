@@ -35,3 +35,5 @@ interface ImportMeta {
 type ObjectOfNested<T, Key = string> = { [K in Key]?: T | ObjectOfNested<T, Key> };
 
 type SetFallback<T, F = string, Key = "_"> = T extends object ? { [K in keyof T | Key]: K extends Key ? F : SetFallback<T[K], F> } : T;
+
+// type SetFallback<T, F = string, Key extends string | number | symbol = "_"> = T extends object ? { [P in keyof T]: SetFallback<T[P], F, Key> } & { [P in Key]: F } : T;

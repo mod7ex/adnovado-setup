@@ -8,8 +8,6 @@ const useTranslate = (name_space: DICTIONARY_NAMESPACES, dependencies: Dependenc
 
     const [namespace_payload, set] = useState($dictionary.get(name_space));
 
-    console.log(namespace_payload);
-
     useEffect(() => {
         $dictionary.load(name_space).then((v) => set(v));
     }, [name_space, language, ...dependencies]);
@@ -20,16 +18,12 @@ const useTranslate = (name_space: DICTIONARY_NAMESPACES, dependencies: Dependenc
 
             const _translation = getNestedValue(namespace_payload, dictionary_path.split("."));
 
-            console.log(_translation);
-
             return _translation || fallback;
         },
         [namespace_payload]
     );
 
-    const $t = useMemo<any>(() => {
-        return recursionProxy<NAMESPACE_PAYLOAD>(namespace_payload ?? {}, FALLBACK_MESSAGE);
-    }, [namespace_payload]);
+    const $t = useCallback((v: (proxied_payload: any) => any) => `${v(recursionProxy<NAMESPACE_PAYLOAD>(namespace_payload ?? {}, FALLBACK_MESSAGE))}`, [namespace_payload]);
 
     return {
         i18n,

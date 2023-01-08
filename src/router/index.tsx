@@ -1,4 +1,4 @@
-import { createBrowserRouter, type LoaderFunction } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Auth from "~/pages/auth";
 import Public from "~/router/Public";
 import Private from "~/router/Private";
@@ -6,9 +6,9 @@ import Dashboard from "~/pages/dashboard";
 import Profile from "~/pages/profile";
 import Outer from "~/layouts/outer";
 import { Form as ListingForm, Index as ListingsIndex } from "~/pages/listings";
-// import { RouterBoundary } from "@/error";
+import { RouterBoundary } from "@/error";
 
-const auth = false;
+const auth = true;
 
 export const routes = [
     {
@@ -26,7 +26,7 @@ export const routes = [
     {
         path: "/",
         element: <Private auth={auth} />,
-        // errorElement: <RouterBoundary />,
+        errorElement: <RouterBoundary />,
         children: [
             {
                 index: true,

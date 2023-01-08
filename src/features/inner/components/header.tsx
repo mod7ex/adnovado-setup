@@ -52,12 +52,12 @@ const ProfileNav = () => {
                                     <ul>
                                         <li>
                                             <AppLink to={{ name: "Profile" }}>
-                                                <Icon name="profile" width={1} height={1} /> <p>{i18n("Profile Settings")}</p>
+                                                <Icon name="profile" width={1} height={1} /> <p>{i18n("header.profile.settings")}</p>
                                             </AppLink>
                                         </li>
                                         <li>
                                             <AppLink to={{ name: "Logout" }}>
-                                                <Icon name="sign-out" width={1} height={1} /> <p>{i18n("Sign Out")}</p>
+                                                <Icon name="sign-out" width={1} height={1} /> <p>{i18n("header.profile.logout")}</p>
                                             </AppLink>
                                         </li>
                                     </ul>

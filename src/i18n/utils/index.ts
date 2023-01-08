@@ -90,6 +90,21 @@ export function getNestedValue<T extends NAMESPACE_PAYLOAD>(target: T, keys: str
     return _target ?? "";
 }
 
+const wrapScalar = <T extends Numberish | undefined>(value: T) => {
+    return new Proxy(
+        {},
+        {
+            get(_, key): any {
+                if (key === "_value_") return value;
+
+                if (key === Symbol.toPrimitive) return () => value;
+
+                return wrapScalar(value);
+            },
+        }
+    );
+};
+
 export const recursionProxy = <T extends NAMESPACE_PAYLOAD>(subject: T, fallback = "", fbKey = "_"): T =>
     new Proxy(subject, {
         get(target, key: string & keyof T) {
@@ -98,7 +113,7 @@ export const recursionProxy = <T extends NAMESPACE_PAYLOAD>(subject: T, fallback
             if (isPlainObject(_target)) return recursionProxy(_target, fallback);
 
             // _ is a default fallback key for that level
-            return _target ?? target[fbKey] ?? fallback;
+            return wrapScalar((_target ?? target[fbKey] ?? fallback) as Numberish | undefined);
         },
     });
 

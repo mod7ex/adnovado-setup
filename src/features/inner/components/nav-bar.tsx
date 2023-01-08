@@ -5,13 +5,11 @@ import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
 
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
-const currentYear = new Date().getFullYear();
-
 const nav = [
-    { name: "Listings", icon: "listings", label: "Listings" },
-    { name: "Orders", icon: "orders", label: "Orders" },
-    { name: "Settings", icon: "settings", label: "Settings" },
-    { name: "Help", icon: "help", label: "Help", disabled: true },
+    { name: "Listings", icon: "listings", label: "sidebar.menu.listings" },
+    { name: "Orders", icon: "orders", label: "sidebar.menu.orders" },
+    { name: "Settings", icon: "settings", label: "sidebar.menu.settings" },
+    { name: "Help", icon: "help", label: "sidebar.menu.help", disabled: true },
 ];
 
 const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disabled?: boolean }>({ isActive, isPending, disabled }: T) => {
@@ -51,7 +49,7 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                         ))}
                     </ul>
                     <div className={styles.footer}>
-                        <p>Copyright &#169;{currentYear} cBay</p>
+                        <p>Copyright &#169;{new Date().getFullYear()} cBay</p>
                     </div>
                 </nav>
             )}
