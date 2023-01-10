@@ -1,0 +1,17 @@
+{
+    "header": {
+        "profile": {
+            "settings": "Paramètre profile",
+            "logout": "Se déconnecter"
+        }
+    },
+
+    "sidebar": {
+        "menu": {
+            "listings": "Listings",
+            "orders": "Orders",
+            "settings": "Paramètre",
+            "help": "Aide"
+        }
+    }
+}

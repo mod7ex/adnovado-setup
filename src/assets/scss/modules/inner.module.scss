@@ -1,6 +1,8 @@
 $hover-padding: 0.7rem;
 $header-height: 4rem;
 
+$nav-gap: 0.7rem;
+
 .container {
     display: grid;
     min-height: 100vh;
@@ -58,11 +60,7 @@ $header-height: 4rem;
                     width: 2rem;
                     height: 2rem;
                     border-radius: 50%;
-                    position: relative;
                     @include flex;
-                    & > img {
-                        position: absolute;
-                    }
 
                     &:hover {
                         background-color: rgba($primary-color, $hover-bg);
@@ -86,6 +84,67 @@ $header-height: 4rem;
                             top: -1px;
                             left: -2px;
                             @include flex;
+                        }
+                    }
+                }
+
+                .language {
+                    position: relative;
+
+                    p {
+                        color: $white;
+                    }
+
+                    button {
+                        padding: 0 0.2rem 0 0.3rem;
+                        border: 1px solid transparent;
+                        border-radius: $br-rounded-sm;
+                        width: 3rem;
+                        height: max-content !important;
+                        @include flex($justify: space-between);
+
+                        &:hover,
+                        &:focus {
+                            background-color: transparent;
+                            border-color: rgba($primary-color, $hover-bg);
+                        }
+                    }
+
+                    .language-options {
+                        right: 0;
+                        top: 50px;
+                        position: absolute;
+                        background-color: $secondary-color;
+                        border-radius: $br-rounded-md;
+                        @include shadow($blur: 11px, $spread: 3px, $color: rgba($secondary-color, $hover-bg * 0.5));
+                        @include flex($direction: column);
+
+                        &::after {
+                            content: " ";
+                            position: absolute;
+                            background-color: $secondary-color;
+                            top: -6px;
+                            right: 14px;
+                            width: 13px;
+                            height: 13px;
+                            transform: rotate(45deg);
+                            @include shadow($blur: 11px, $spread: 3px, $color: rgba($secondary-color, $hover-bg * 0.5));
+                        }
+
+                        li {
+                            z-index: 10;
+                            cursor: pointer;
+                            p {
+                                cursor: pointer;
+                                text-align: left;
+                                font-size: $nav-gap;
+                                padding: 0 1rem;
+                            }
+
+                            &:hover {
+                                background-color: $third-color;
+                                border-radius: $br-rounded-md;
+                            }
                         }
                     }
                 }
@@ -137,8 +196,6 @@ $header-height: 4rem;
                             border-top: 1px solid rgba(255, 255, 255, $hover-bg * 0.5);
                             text-align: left;
 
-                            $nav-gap: 0.7rem;
-
                             a {
                                 width: 100%;
                                 color: $white;
@@ -157,6 +214,7 @@ $header-height: 4rem;
                                 &:hover {
                                     text-decoration: none;
                                     background-color: $third-color;
+                                    border-radius: $br-rounded-md;
 
                                     p {
                                         padding-left: $hover-padding;

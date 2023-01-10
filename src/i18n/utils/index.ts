@@ -6,6 +6,11 @@ export enum SUPPORTED_LANGUAGES {
     FRENCH = "fr",
 }
 
+export enum EXTENDED_SUPPORTED_LANGUAGES {
+    ENGLISH = "english",
+    FRENCH = "français",
+}
+
 /**
  * dictionary inside '~/i18n/locales/en/**' without <.json>
  */
@@ -141,8 +146,6 @@ class Language {
             _language = preferred_supported_language();
 
             localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, _language);
-        } else {
-            _language = JSON.parse(_language);
         }
 
         return _language as SUPPORTED_LANGUAGES;
@@ -166,7 +169,7 @@ class Dictionary {
 
     private state?: Map<SUPPORTED_LANGUAGES, { [K in DICTIONARY_NAMESPACES]?: NAMESPACE_PAYLOAD }>;
 
-    constructor(private readonly _language: Readonly<Language>) {
+    constructor(private readonly _language: Language) {
         if (!Dictionary.instance) {
             this.state = new Map();
 
@@ -223,6 +226,9 @@ class Dictionary {
     }
 }
 
-export const $language = Object.freeze(new Language());
+/* export const $language = Object.freeze(new Language());
 
-export const $dictionary = Object.freeze(new Dictionary($language));
+export const $dictionary = Object.freeze(new Dictionary($language)); */
+
+export const $language = new Language();
+export const $dictionary = new Dictionary($language);

@@ -1,10 +1,10 @@
-import { useCallback, useContext, useEffect, useMemo, useState, type DependencyList } from "react";
-import { getNestedValue, recursionProxy, type NAMESPACE_PAYLOAD, type DICTIONARY_NAMESPACES, $dictionary, Context } from "~/i18n";
+import { useCallback, useEffect, useState, type DependencyList } from "react";
+import { getNestedValue, recursionProxy, type NAMESPACE_PAYLOAD, type DICTIONARY_NAMESPACES, $dictionary, useLanguage } from "~/i18n";
 
 const FALLBACK_MESSAGE = "______NOT_TRANSLATED______";
 
 const useTranslate = (name_space: DICTIONARY_NAMESPACES, dependencies: DependencyList = []) => {
-    const { language } = useContext(Context);
+    const { language } = useLanguage();
 
     const [namespace_payload, set] = useState($dictionary.get(name_space));
 

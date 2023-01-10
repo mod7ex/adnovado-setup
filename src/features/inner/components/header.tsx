@@ -8,7 +8,7 @@ import { useRef } from "react";
 import useClickOutside from "~/hooks/useClickOutside";
 import Icon from "@/icon";
 import { ExternalImg } from "@/image";
-import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
+import { Translate, DICTIONARY_NAMESPACES, SUPPORTED_LANGUAGES, useLanguage, EXTENDED_SUPPORTED_LANGUAGES } from "~/i18n";
 
 type RawProps = React.ComponentPropsWithoutRef<"header">;
 
@@ -71,6 +71,45 @@ const ProfileNav = () => {
     );
 };
 
+const LanguageSwitcher = () => {
+    const { language, set_language } = useLanguage();
+
+    const [collapsed, toggle] = useToggle(true);
+
+    const nodeRef = useRef(null);
+    const btnRef = useRef(null);
+
+    useClickOutside(
+        [nodeRef, btnRef],
+        () => {
+            toggle(true);
+        },
+        !collapsed
+    );
+
+    return (
+        <>
+            <button ref={btnRef} onClick={(e) => toggle((v) => !v)}>
+                <p>{language}</p>
+
+                <Icon name="arrow-down" className={collapsed ? "" : "rotate-180"} />
+            </button>
+
+            <Transition nodeRef={nodeRef} in={!collapsed} timeout={125}>
+                {(state) => (
+                    <ul ref={nodeRef} className={`${"show-up-and-fade"} show-up-and-fade__${state} ${styles.languageOptions}`}>
+                        {Object.entries(SUPPORTED_LANGUAGES).map(([key, val], i) => (
+                            <li key={i} onClick={() => set_language(val)}>
+                                <p>{EXTENDED_SUPPORTED_LANGUAGES[key as keyof typeof EXTENDED_SUPPORTED_LANGUAGES]}</p>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </Transition>
+        </>
+    );
+};
+
 const Header: React.FC<RawProps> = ({ ...props }) => {
     return (
         <header {...props}>
@@ -84,11 +123,9 @@ const Header: React.FC<RawProps> = ({ ...props }) => {
             </div>
             <div className={styles.right}>
                 <ul>
-                    {/* <li>
-                        <button>
-                            <Icon name="full-screen" alt="dark/light mode" />
-                        </button>
-                    </li> */}
+                    <li className={styles.language}>
+                        <LanguageSwitcher />
+                    </li>
                     <li className={styles.notifications}>
                         <button data-count="13">
                             <p>13</p>
