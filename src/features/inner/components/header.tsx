@@ -33,7 +33,7 @@ const ProfileNav = () => {
         () => {
             toggle(true);
         },
-        !collapsed
+        { condition: !collapsed }
     );
 
     return (
@@ -84,7 +84,7 @@ const LanguageSwitcher = () => {
         () => {
             toggle(true);
         },
-        !collapsed
+        { condition: !collapsed }
     );
 
     return (
