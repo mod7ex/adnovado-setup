@@ -1,5 +1,12 @@
-import { routes } from "~/router";
-import { app_join } from "~/utils";
+import { routes, PAGES } from "~/router";
+import { trimChar } from "~/utils";
+
+export const app_join = (payload: string[]) => {
+    return payload
+        .filter((v) => !!v)
+        .map((v) => trimChar(v, "/"))
+        .join("/");
+};
 
 interface IRoute {
     name?: string;
@@ -31,7 +38,11 @@ const raw_resolve = (name: string, items: IRoute[]): string[] => {
 };
 
 export const resolve = (name: Parameters<typeof raw_resolve>[0]) => {
-    return app_join(raw_resolve(name, routes));
+    const _paths = raw_resolve(name, routes);
+
+    if (!_paths.length) return "404";
+
+    return app_join(_paths);
 };
 
 // ************************************************************************
@@ -39,7 +50,7 @@ export const resolve = (name: Parameters<typeof raw_resolve>[0]) => {
 type TPayload = Record<string, string>;
 
 export interface ITo {
-    name: string;
+    name: PAGES;
     params?: TPayload;
     query?: TPayload;
     hash?: string | undefined;

@@ -47,25 +47,74 @@ export const routes = [
             },
 
             {
-                path: "orders",
+                path: "users",
                 children: [
                     {
                         index: true,
-                        element: <h1>Orders</h1>,
-                        name: "Orders",
+                        element: <h1>Users</h1>,
+                        name: "Users",
                     },
                     {
                         path: ":id",
-                        element: <h1>Orders id</h1>,
-                        name: "Order",
+                        children: [
+                            {
+                                index: true,
+                                element: <h1>User id</h1>,
+                                name: "User",
+                            },
+                            {
+                                path: "edit",
+                                element: <h1>edit User id</h1>,
+                                name: "EditUser",
+                            },
+                            {
+                                path: "delete",
+                                name: "DeleteUser",
+                            },
+                        ],
                     },
                     {
                         path: "add",
-                        element: <h1>Orders id</h1>,
-                        name: "AddOrder",
+                        element: <h1>Users id</h1>,
+                        name: "AddUser",
                     },
                 ],
             },
+
+            /* {
+                path: "customers",
+                children: [
+                    {
+                        index: true,
+                        element: <h1>Customers</h1>,
+                        name: "Customers",
+                    },
+                    {
+                        path: ":id",
+                        children: [
+                            {
+                                index: true,
+                                element: <h1>Customer id</h1>,
+                                name: "Customer",
+                            },
+                            {
+                                path: "edit",
+                                element: <h1>edit Customer id</h1>,
+                                name: "EditCustomer",
+                            },
+                            {
+                                path: "delete",
+                                name: "DeleteCustomer",
+                            },
+                        ],
+                    },
+                    {
+                        path: "add",
+                        element: <h1>Customers id</h1>,
+                        name: "AddCustomer",
+                    },
+                ],
+            }, */
 
             {
                 path: "listings",
@@ -117,3 +166,27 @@ export const routes = [
 ];
 
 export default createBrowserRouter(routes);
+
+export enum PAGES {
+    AUTH = "Auth",
+    DASHBOARD = "Dashboard",
+    PROFILE = "Profile",
+    SETTINGS = "Settings",
+    USERS = "Users",
+    USER = "User",
+    EDITUSER = "EditUser",
+    DELETEUSER = "DeleteUser",
+    ADDUSER = "AddUser",
+    CUSTOMERS = "Customers",
+    CUSTOMER = "Customer",
+    EDITCUSTOMER = "EditCustomer",
+    DELETECUSTOMER = "DeleteCustomer",
+    ADDCUSTOMER = "AddCustomer",
+    LISTINGS = "Listings",
+    LISTING = "Listing",
+    EDITLISTING = "EditListing",
+    DELETELISTING = "DeleteListing",
+    ADDLISTING = "AddListing",
+    HELP = "Help",
+    LOGOUT = "Logout",
+}

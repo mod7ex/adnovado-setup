@@ -1,5 +1,5 @@
 import styles from "~/assets/scss/modules/inner.module.scss";
-import { AppLink } from "~/router/components";
+import { AppLink, PAGES } from "~/router";
 import useToggle from "~/hooks/useToggle";
 import TextInput from "@/text-input";
 import useFullScreen from "~/hooks/useFullScreen";
@@ -51,12 +51,12 @@ const ProfileNav = () => {
                                     <p>Mourad EL CADI</p>
                                     <ul>
                                         <li>
-                                            <AppLink to={{ name: "Profile" }}>
+                                            <AppLink to={{ name: PAGES.PROFILE }}>
                                                 <Icon name="profile" width={1} height={1} /> <p>{i18n("header.profile.settings")}</p>
                                             </AppLink>
                                         </li>
                                         <li>
-                                            <AppLink to={{ name: "Logout" }}>
+                                            <AppLink to={{ name: PAGES.LOGOUT }}>
                                                 <Icon name="sign-out" width={1} height={1} /> <p>{i18n("header.profile.logout")}</p>
                                             </AppLink>
                                         </li>

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { type ITo, resolve_payload } from "~/router/utils";
-import { isObject } from "~/utils/types";
+import { isPlainObject } from "~/utils/types";
 
 type RawProps = React.ComponentProps<typeof NavLink>;
 
@@ -11,7 +11,7 @@ interface Props extends RawProps {
 const AppNavLink: React.FC<Props> = ({ children, to, ...props }) => {
     let _to: Props["to"] = to;
 
-    if (isObject(to) && "name" in to) {
+    if (isPlainObject(to) && "name" in to) {
         _to = resolve_payload(to);
     }
 

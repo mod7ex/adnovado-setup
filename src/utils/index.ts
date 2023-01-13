@@ -11,10 +11,6 @@ export const scheduleTask = (job: Parameters<typeof setTimeout>[0], tm = 0) => {
 //     }
 // };
 
-export const fail = <T extends string>(msg: T) => {
-    throw Error(msg);
-};
-
 export const trimChar = (payload: string, target: string): string => {
     if (!payload) return payload;
 
@@ -25,11 +21,8 @@ export const trimChar = (payload: string, target: string): string => {
     return payload;
 };
 
-export const app_join = (payload: string[]) => {
-    return payload
-        .filter((v) => !!v)
-        .map((v) => trimChar(v, "/"))
-        .join("/");
+export const fail = <T extends string>(msg: T) => {
+    throw Error(msg);
 };
 
 export const sleep = <T>(time: number = 1000, resolve_to?: T) => {

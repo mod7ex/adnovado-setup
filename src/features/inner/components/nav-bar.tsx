@@ -1,4 +1,4 @@
-import { AppLink, AppNavLink } from "~/router/components";
+import { AppLink, AppNavLink, PAGES } from "~/router";
 import styles from "~/assets/scss/modules/inner.module.scss";
 import Icon from "~/components/icon";
 import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
@@ -6,10 +6,11 @@ import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
 const nav = [
-    { name: "Listings", icon: "listings", label: "sidebar.menu.listings" },
-    { name: "Orders", icon: "orders", label: "sidebar.menu.orders" },
-    { name: "Settings", icon: "settings", label: "sidebar.menu.settings" },
-    { name: "Help", icon: "help", label: "sidebar.menu.help", disabled: true },
+    { name: PAGES.LISTINGS, icon: "listings", label: "sidebar.menu.listings" },
+    { name: PAGES.USERS, icon: "users", label: "sidebar.menu.users" },
+    { name: PAGES.CUSTOMERS, icon: "customers", label: "sidebar.menu.customers" },
+    { name: PAGES.SETTINGS, icon: "settings", label: "sidebar.menu.settings" },
+    { name: PAGES.HELP, icon: "help", label: "sidebar.menu.help", disabled: true },
 ];
 
 const classHandler = <T extends { isActive?: boolean; isPending?: boolean; disabled?: boolean }>({ isActive, isPending, disabled }: T) => {
@@ -28,7 +29,7 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
             {({ i18n }) => (
                 <nav {...props}>
                     <div className={styles.logo}>
-                        <AppLink to={{ name: "Dashboard" }}>
+                        <AppLink to={{ name: PAGES.DASHBOARD }}>
                             <img src={"/cropped-logo.svg"} alt="logo" />
                         </AppLink>
                     </div>
@@ -49,7 +50,7 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                         ))}
                     </ul>
                     <div className={styles.footer}>
-                        <p>Copyright &#169;{new Date().getFullYear()} cBay</p>
+                        <p>Copyright &#169;{new Date().getFullYear()} adnovado</p>
                     </div>
                 </nav>
             )}

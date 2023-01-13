@@ -9,7 +9,8 @@
     "sidebar": {
         "menu": {
             "listings": "Listings",
-            "orders": "Orders",
+            "users": "Users",
+            "customers": "Customers",
             "settings": "Settings",
             "help": "Help"
         }
