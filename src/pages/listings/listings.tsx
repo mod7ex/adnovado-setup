@@ -1,12 +1,12 @@
 import { Index } from "~/features/listings";
-import useTranslation from "~/hooks/useTranslation";
+import { useTranslate } from "~/i18n";
 import PageWrapper from "~/layouts/page-wrapper";
 
 const Listings = () => {
-    const { i18n: t } = useTranslation();
+    const { i18n } = useTranslate((v) => v.PAGE_DASHBOARD);
 
     return (
-        <PageWrapper title={t("Listings")}>
+        <PageWrapper title={i18n("Listings")}>
             <Index />
         </PageWrapper>
     );

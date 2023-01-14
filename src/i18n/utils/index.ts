@@ -1,5 +1,5 @@
-import { isPlainObject } from "~/utils/types";
-import { trimChar } from "~/utils";
+import { isPlainObject, trimChar } from "~/utils";
+import { PAGES } from "~/router";
 
 export enum SUPPORTED_LANGUAGES {
     ENGLISH = "en",
@@ -15,18 +15,34 @@ export enum EXTENDED_SUPPORTED_LANGUAGES {
  * dictionary inside '~/i18n/locales/en/**' without <.json>
  */
 const DICTIONARY_NAMESPACE = {
-    AUTH: { page: "Auth", namespace: "auth" },
     INNER: { namespace: "inner" },
     COMMON: { namespace: "common" },
-    PAGE_DASHBOARD: { page: "Dashboard", namespace: "pages/dashboard" },
+    PAGE_AUTH: { page: PAGES.AUTH, namespace: "auth" },
+    PAGE_DASHBOARD: { page: PAGES.DASHBOARD, namespace: "pages/dashboard" },
+    PAGE_LISTINGS: { page: PAGES.DASHBOARD, namespace: "pages/dashboard" },
 } as const;
 
 export enum DICTIONARY_NAMESPACES {
-    AUTH = "auth",
     INNER = "inner",
     COMMON = "common",
+    PAGE_AUTH = "auth",
     PAGE_DASHBOARD = "pages/dashboard",
+    PAGE_LISTINGS = "pages/dashboard",
 }
+
+// type IDN = {
+//     [K in keyof typeof DICTIONARY_NAMESPACES]: {
+//         namespace: K;
+//         page: K extends `PAGE_${infer R extends string}` ? PAGES[R] : undefined;
+//     };
+// };
+
+const DN = Object.entries(DICTIONARY_NAMESPACES).reduce((prev, [key, ns]) => {
+    return {
+        [key]: { namespace: ns, page: PAGES[key.replace("PAGE_", "") as keyof typeof PAGES] },
+        ...prev,
+    };
+}, {});
 
 // export type DICTIONARY_NAMESPACES = typeof DICTIONARY_NAMESPACE extends Record<string, { namespace: infer D }> ? D : never;
 
@@ -36,19 +52,23 @@ export const LOCAL_STORAGE_LANGUAGE_KEY = "language";
 
 export type NAMESPACE_PAYLOAD = SetFallback<ObjectOfNested<string>>;
 
-const raw_loader = <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => import(`~/i18n/locales/${lang}/${trimChar(name_space, "/")}.json`) as Promise<{ default: T | undefined }>;
+const raw_loader = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => {
+    const response = await fetch(`/locales/${lang}/${trimChar(name_space, "/")}.json`);
+
+    return response.json() as Promise<T | undefined>;
+};
 
 export const load = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES): Promise<T | undefined> => {
     let payload: T | undefined;
 
     try {
-        payload = (await raw_loader<T>(lang, name_space)).default;
+        payload = await raw_loader<T>(lang, name_space);
     } finally {
         if (payload) return payload;
     }
 
     try {
-        payload = (await raw_loader<T>(SUPPORTED_LANGUAGES.ENGLISH, name_space)).default;
+        payload = await raw_loader<T>(SUPPORTED_LANGUAGES.ENGLISH, name_space);
     } finally {
         if (payload) return payload;
     }
@@ -225,10 +245,6 @@ class Dictionary {
         this.state!.clear();
     }
 }
-
-/* export const $language = Object.freeze(new Language());
-
-export const $dictionary = Object.freeze(new Dictionary($language)); */
 
 export const $language = new Language();
 export const $dictionary = new Dictionary($language);

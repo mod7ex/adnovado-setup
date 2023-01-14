@@ -1,15 +1,12 @@
 import PageWrapper from "~/layouts/page-wrapper";
-import useTranslation from "~/hooks/useTranslation";
+import { useTranslate, DICTIONARY_NAMESPACES } from "~/i18n";
 
 const Dashboard = () => {
-    const { i18n: t } = useTranslation();
+    const { i18n } = useTranslate(DICTIONARY_NAMESPACES.PAGE_DASHBOARD);
 
     return (
-        <PageWrapper title={t("Dashboard")}>
-            <div>
-                <h1>Dashboard</h1>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam saepe optio quo voluptas inventore suscipit possimus quaerat eaque aspernatur. Itaque obcaecati quisquam nostrum animi eveniet repudiandae veniam quae numquam iure?</p>
-            </div>
+        <PageWrapper title={i18n("title")}>
+            <div>...</div>
         </PageWrapper>
     );
 };

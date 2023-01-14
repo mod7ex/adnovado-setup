@@ -1,5 +1,6 @@
-import { routes, PAGES } from "~/router";
+import { routes } from "~/router/router";
 import { trimChar } from "~/utils";
+import { PAGES } from "~/constants";
 
 export const app_join = (payload: string[]) => {
     return payload
