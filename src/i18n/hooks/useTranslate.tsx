@@ -21,13 +21,15 @@ const useTranslate = (name_space: NS, dependencies: DependencyList = []) => {
 
     useEffect(() => {
         $dictionary.load(_namespace).then((v) => set(v));
-    }, [name_space, language, ...dependencies]);
+    }, [_namespace, language, ...dependencies]);
 
     const i18n = useCallback(
-        (dictionary_path: string, fallback: string = "_") => {
+        (dictionary_path: string, fallback = "_") => {
             if (!namespace_payload) return fallback;
 
             const _translation = getNestedValue(namespace_payload, dictionary_path.split("."));
+
+            console.log(`[${dictionary_path}] :${_translation}, [NS]: ${namespace_payload}`);
 
             return _translation || fallback;
         },

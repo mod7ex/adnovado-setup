@@ -1,13 +1,13 @@
-import useTranslation from "~/hooks/useTranslation";
+import { useTranslate } from "~/i18n";
 import PageWrapper from "~/layouts/page-wrapper";
 
 const Profile = () => {
-    const { i18n: t } = useTranslation();
+    const { i18n } = useTranslate((v) => v.COMMON);
 
     return (
-        <PageWrapper title={t("Profile")}>
+        <PageWrapper title={i18n("title")}>
             <div>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam saepe optio quo voluptas inventore suscipit possimus quaerat eaque aspernatur. Itaque obcaecati quisquam nostrum animi eveniet repudiandae veniam quae numquam iure?</p>
+                <p>...</p>
             </div>
         </PageWrapper>
     );

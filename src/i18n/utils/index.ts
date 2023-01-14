@@ -1,5 +1,5 @@
 import { isPlainObject, trimChar } from "~/utils";
-import { PAGES } from "~/router";
+// import { PAGES } from "~/router";
 
 export enum SUPPORTED_LANGUAGES {
     ENGLISH = "en",
@@ -11,40 +11,33 @@ export enum EXTENDED_SUPPORTED_LANGUAGES {
     FRENCH = "français",
 }
 
-/**
- * dictionary inside '~/i18n/locales/en/**' without <.json>
- */
-const DICTIONARY_NAMESPACE = {
-    INNER: { namespace: "inner" },
-    COMMON: { namespace: "common" },
-    PAGE_AUTH: { page: PAGES.AUTH, namespace: "auth" },
-    PAGE_DASHBOARD: { page: PAGES.DASHBOARD, namespace: "pages/dashboard" },
-    PAGE_LISTINGS: { page: PAGES.DASHBOARD, namespace: "pages/dashboard" },
-} as const;
-
 export enum DICTIONARY_NAMESPACES {
     INNER = "inner",
     COMMON = "common",
     PAGE_AUTH = "auth",
     PAGE_DASHBOARD = "pages/dashboard",
-    PAGE_LISTINGS = "pages/dashboard",
+    PAGE_LISTINGS = "pages/listings",
+    PAGE_PROFILE = "pages/profile",
 }
 
-// type IDN = {
-//     [K in keyof typeof DICTIONARY_NAMESPACES]: {
-//         namespace: K;
-//         page: K extends `PAGE_${infer R extends string}` ? PAGES[R] : undefined;
-//     };
-// };
+/**
+ * dictionary inside 'public/locales/en/**' without <.json>
+ */
+/*
+type T_DICTIONARY_NAMESPACE = {
+    [K in keyof typeof DICTIONARY_NAMESPACES]: {
+        namespace: K;
+        page: K extends `PAGE_${infer R extends keyof typeof PAGES}` ? typeof PAGES[R] : never;
+    };
+};
 
-const DN = Object.entries(DICTIONARY_NAMESPACES).reduce((prev, [key, ns]) => {
+const DICTIONARY_NAMESPACE = Object.entries(DICTIONARY_NAMESPACES).reduce((prev, [key, ns]) => {
     return {
         [key]: { namespace: ns, page: PAGES[key.replace("PAGE_", "") as keyof typeof PAGES] },
         ...prev,
     };
-}, {});
-
-// export type DICTIONARY_NAMESPACES = typeof DICTIONARY_NAMESPACE extends Record<string, { namespace: infer D }> ? D : never;
+}, {}) as T_DICTIONARY_NAMESPACE;
+*/
 
 export const LANGUAGE_CONTEXT_DISPLAY_NAME = "language_context";
 
@@ -53,25 +46,27 @@ export const LOCAL_STORAGE_LANGUAGE_KEY = "language";
 export type NAMESPACE_PAYLOAD = SetFallback<ObjectOfNested<string>>;
 
 const raw_loader = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => {
-    const response = await fetch(`/locales/${lang}/${trimChar(name_space, "/")}.json`);
+    let payload: any;
 
-    return response.json() as Promise<T | undefined>;
+    try {
+        const response = await fetch(`/locales/${lang}/${trimChar(name_space, "/")}.json`);
+        if (!response.ok) return;
+        payload = await response.json();
+        if (payload) return payload as T;
+    } finally {
+    }
 };
 
 export const load = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES): Promise<T | undefined> => {
     let payload: T | undefined;
 
-    try {
-        payload = await raw_loader<T>(lang, name_space);
-    } finally {
-        if (payload) return payload;
-    }
+    payload = await raw_loader<T>(lang, name_space);
 
-    try {
-        payload = await raw_loader<T>(SUPPORTED_LANGUAGES.ENGLISH, name_space);
-    } finally {
-        if (payload) return payload;
-    }
+    if (payload) return payload;
+
+    payload = await raw_loader<T>(SUPPORTED_LANGUAGES.ENGLISH, name_space);
+
+    if (payload) return payload;
 };
 
 export const preferred_supported_language = () => {

@@ -3,12 +3,12 @@ import { default as Form, FormSection } from "@/form";
 import TextInput from "@/text-input";
 import CheckBox from "@/check-box";
 import Link from "@/link";
-import { DICTIONARY_NAMESPACES, useTranslate } from "~/i18n";
+import { useTranslate } from "~/i18n";
 
 type Props = { onSwitchProcess: (e: React.MouseEvent) => void };
 
 const Login: React.FC<Props> = ({ onSwitchProcess }) => {
-    const { $t } = useTranslate(DICTIONARY_NAMESPACES.AUTH);
+    const { $t } = useTranslate((v) => v.PAGE_AUTH);
 
     const Footer = () => (
         <Link to="#" onClick={onSwitchProcess}>

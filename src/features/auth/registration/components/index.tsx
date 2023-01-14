@@ -3,12 +3,12 @@ import TextInput from "@/text-input";
 import CheckBox from "@/check-box";
 import Link from "@/link";
 import styles from "~/assets/scss/modules/auth.module.scss";
-import { useTranslate, DICTIONARY_NAMESPACES } from "~/i18n";
+import { useTranslate } from "~/i18n";
 
 type Props = { onSwitchProcess: (e: React.MouseEvent) => void };
 
 const Register: React.FC<Props> = ({ onSwitchProcess }) => {
-    const { i18n } = useTranslate(DICTIONARY_NAMESPACES.AUTH);
+    const { i18n } = useTranslate((v) => v.PAGE_AUTH);
 
     const footer = (
         <Link to="#" onClick={onSwitchProcess}>
