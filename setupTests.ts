@@ -4,13 +4,21 @@ import { LocalStorageMock } from "./src/mocks/utils";
 import { fetch } from "cross-fetch";
 
 /* 
-    Polyfilling fetch, fetch will run indifrent environments node, browser ...
+    Poly-filling fetch, fetch will run indifferent environments node, browser ...
     so run `npm install --save-dev cross-fetch`
 */
 
 global.fetch = fetch;
 global.localStorage = new LocalStorageMock();
 
-beforeAll(() => server.listen({ onUnhandledRequest: `error` }));
-afterEach(() => server.resetHandlers());
+beforeAll(() => {
+    localStorage.reset();
+    server.listen({ onUnhandledRequest: `error` });
+});
+
+afterEach(() => {
+    localStorage.reset();
+    server.resetHandlers();
+});
+
 afterAll(() => server.close());

@@ -24,6 +24,7 @@ type TEmpty = undefined | null;
 
 interface ImportMetaEnv {
     readonly VITE_APP_TITLE: string;
+    readonly VITE_HOSTNAME: string;
 }
 
 interface ImportMeta {

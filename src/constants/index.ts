@@ -5,6 +5,8 @@ export const MODE = {
     STRICT_DEV: import.meta.env.DEV && !(import.meta.env.TEST_MODE === "true"),
 };
 
+export const HOSTNAME = import.meta.env.VITE_HOSTNAME;
+
 export enum PAGES {
     AUTH = "Auth",
     DASHBOARD = "Dashboard",
