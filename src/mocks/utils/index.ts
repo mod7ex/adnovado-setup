@@ -20,6 +20,11 @@ export class LocalStorageMock {
         this.store.clear();
     }
 
+    reset() {
+        this.clear();
+        this.setItem(LOCAL_STORAGE_DEFAULTS.KEY, LOCAL_STORAGE_DEFAULTS.VALUE);
+    }
+
     getItem(key: string) {
         return this.store.get(key) ?? null;
     }

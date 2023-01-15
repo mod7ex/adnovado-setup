@@ -19,9 +19,9 @@ describe("useLocalStorage", () => {
 
         expect(result.current[0]).toBe(TEST.FIRST);
 
-        const value_stored_in_localstorage = localStorage.getItem(LOCAL_STORAGE_DEFAULTS.KEY)!;
+        const value_stored_in_local_storage = localStorage.getItem(LOCAL_STORAGE_DEFAULTS.KEY)!;
 
-        expect(JSON.parse(value_stored_in_localstorage)).toEqual(TEST.FIRST);
+        expect(JSON.parse(value_stored_in_local_storage)).toEqual(TEST.FIRST);
     });
 
     it("changes correctly", () => {
@@ -37,8 +37,8 @@ describe("useLocalStorage", () => {
 
         expect(result.current[0]).toBe(TEST.SECOND);
 
-        const value_stored_in_localstorage = localStorage.getItem(KEY)!;
+        const value_stored_in_local_storage = localStorage.getItem(KEY)!;
 
-        expect(JSON.parse(value_stored_in_localstorage)).toEqual(TEST.SECOND);
+        expect(JSON.parse(value_stored_in_local_storage)).toEqual(TEST.SECOND);
     });
 });

@@ -1,4 +1,5 @@
 import { isPlainObject, trimChar } from "~/utils";
+import { HOSTNAME, MODE } from "~/constants";
 // import { PAGES } from "~/router";
 
 export enum SUPPORTED_LANGUAGES {
@@ -45,11 +46,19 @@ export const LOCAL_STORAGE_LANGUAGE_KEY = "language";
 
 export type NAMESPACE_PAYLOAD = SetFallback<ObjectOfNested<string>>;
 
+export const end_point = (lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => {
+    const _end_point = `/locales/${lang}/${trimChar(name_space, "/")}.json`;
+
+    if (MODE.TEST) return `https://${HOSTNAME}${_end_point}`;
+
+    return _end_point;
+};
+
 const raw_loader = async <T>(lang: SUPPORTED_LANGUAGES, name_space: DICTIONARY_NAMESPACES) => {
     let payload: any;
 
     try {
-        const response = await fetch(`/locales/${lang}/${trimChar(name_space, "/")}.json`);
+        const response = await fetch(end_point(lang, name_space));
         if (!response.ok) return;
         payload = await response.json();
         if (payload) return payload as T;
@@ -139,8 +148,8 @@ export const recursionProxy = <T extends NAMESPACE_PAYLOAD>(subject: T, fallback
 
 // --------------------------------------- i18n implementation ---------------------------------------
 
-class Language {
-    static instance?: Language;
+export class Language {
+    private static instance?: Language;
 
     private state?: SUPPORTED_LANGUAGES;
 
@@ -177,10 +186,15 @@ class Language {
     get() {
         return this.state!;
     }
+
+    reset() {
+        localStorage.removeItem(LOCAL_STORAGE_LANGUAGE_KEY);
+        this.state = this.load();
+    }
 }
 
-class Dictionary {
-    static instance?: Dictionary;
+export class Dictionary {
+    private static instance?: Dictionary;
 
     private state?: Map<SUPPORTED_LANGUAGES, { [K in DICTIONARY_NAMESPACES]?: NAMESPACE_PAYLOAD }>;
 
@@ -198,23 +212,27 @@ class Dictionary {
         return this._language.get();
     }
 
+    get namespaces() {
+        return Object.keys(this.state?.get(this.language) ?? {});
+    }
+
     set_language(v: SUPPORTED_LANGUAGES) {
         this._language.set(v);
     }
 
-    set(name_space: DICTIONARY_NAMESPACES, name_space_payload: NAMESPACE_PAYLOAD) {
+    set(name_space: DICTIONARY_NAMESPACES, payload: NAMESPACE_PAYLOAD) {
         const _language = this.language;
 
         let _dictionary = this.state!.get(_language);
 
         if (!_dictionary) {
-            this.state!.set(_language, { [name_space]: name_space_payload });
+            this.state!.set(_language, { [name_space]: payload });
             return;
         }
 
         if (name_space in _dictionary) return;
 
-        _dictionary[name_space] = name_space_payload;
+        _dictionary[name_space] = payload;
     }
 
     get(name_space: DICTIONARY_NAMESPACES): NAMESPACE_PAYLOAD | undefined {
