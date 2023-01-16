@@ -1,14 +1,25 @@
-import useLanguage from "~/i18n/hooks/useLanguage";
-import { SUPPORTED_LANGUAGES } from "~/i18n/utils";
-import { vi } from "vitest";
-import { renderHook } from "~/../test-utils";
+import { useLanguage, $language } from "~/i18n";
+import { preferred_supported_language } from "~/i18n/utils";
+import { renderHook, act, type RenderHookResult } from "~/../test-utils";
+import { TEST_LANGUAGE } from "~/mocks/i18n";
 
 describe("useLanguage", () => {
-    it("at first & by default the chosen language is <ENGLISH>", () => {
-        // const { result } = renderHook(useLanguage);
+    let handler: RenderHookResult<ReturnType<typeof useLanguage>, void>;
 
-        // expect(result.current.language).toEqual(SUPPORTED_LANGUAGES.ENGLISH);
+    beforeEach(() => {
+        handler = renderHook(useLanguage);
+    });
 
-        expect(1).toBe(1);
+    it("at first & by default the chosen language is <preferred_supported_language>", () => {
+        expect(handler.result.current.language).toBe(preferred_supported_language());
+    });
+
+    it("is able to set language", async () => {
+        act(() => {
+            handler.result.current.set_language(TEST_LANGUAGE);
+        });
+
+        expect(handler.result.current.language).toBe(TEST_LANGUAGE);
+        expect(handler.result.current.language).toBe($language.get());
     });
 });
