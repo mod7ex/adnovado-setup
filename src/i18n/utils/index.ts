@@ -137,7 +137,7 @@ const wrapScalar = <T extends Numberish | undefined>(value: T) => {
 export const recursionProxy = <T extends NAMESPACE_PAYLOAD>(subject: T, fallback = "", fbKey = "_"): T =>
     new Proxy(subject, {
         get(target, key: string & keyof T) {
-            const _target = target[key];
+            const _target: T[string & keyof T] = target[key];
 
             if (isPlainObject(_target)) return recursionProxy(_target, fallback);
 
@@ -220,7 +220,7 @@ export class Dictionary {
         this._language.set(v);
     }
 
-    set(name_space: DICTIONARY_NAMESPACES, payload: NAMESPACE_PAYLOAD) {
+    private set(name_space: DICTIONARY_NAMESPACES, payload: NAMESPACE_PAYLOAD) {
         const _language = this.language;
 
         let _dictionary = this.state!.get(_language);
@@ -230,8 +230,6 @@ export class Dictionary {
             return;
         }
 
-        if (name_space in _dictionary) return;
-
         _dictionary[name_space] = payload;
     }
 
@@ -240,13 +238,11 @@ export class Dictionary {
         if (_dictionary) return _dictionary[name_space];
     }
 
-    async load(name_space: DICTIONARY_NAMESPACES): Promise<NAMESPACE_PAYLOAD | never> {
+    async load(name_space: DICTIONARY_NAMESPACES): Promise<NAMESPACE_PAYLOAD> {
         let payload = this.get(name_space);
 
         if (!payload) {
-            payload = await load<NAMESPACE_PAYLOAD>(this.language, name_space);
-
-            if (!payload) throw Error("Couldn't load translation");
+            payload = (await load<NAMESPACE_PAYLOAD>(this.language, name_space)) ?? {};
 
             this.set(name_space, payload);
         }

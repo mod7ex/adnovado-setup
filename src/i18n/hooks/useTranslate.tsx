@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type DependencyList } from "
 import { getNestedValue, recursionProxy, type NAMESPACE_PAYLOAD, DICTIONARY_NAMESPACES, $dictionary, useLanguage } from "~/i18n";
 import { isFunction } from "~/utils";
 
-const FALLBACK_MESSAGE = "______NOT_TRANSLATED______";
+export const FALLBACK_MESSAGE = "______NOT_TRANSLATED______";
 
 type NS = DICTIONARY_NAMESPACES | ((payload: Record<keyof typeof DICTIONARY_NAMESPACES, DICTIONARY_NAMESPACES>) => DICTIONARY_NAMESPACES);
 
@@ -29,7 +29,7 @@ const useTranslate = (name_space: NS, dependencies: DependencyList = []) => {
 
             const _translation = getNestedValue(namespace_payload, dictionary_path.split("."));
 
-            console.log(`[${dictionary_path}] :${_translation}, [NS]: ${namespace_payload}`);
+            // console.log(`[${dictionary_path}] :${_translation}, [NS]: ${namespace_payload}`);
 
             return _translation || fallback;
         },
