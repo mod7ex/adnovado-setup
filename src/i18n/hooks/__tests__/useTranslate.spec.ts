@@ -2,12 +2,12 @@ import { useTranslate, $language, FALLBACK_MESSAGE } from "~/i18n";
 import { renderHook, type RenderHookResult, waitFor } from "~/../test-utils";
 import { TEST_LANGUAGE, TEST_NAMESPACE, TEST_PAYLOAD } from "~/mocks/i18n";
 
-$language.set(TEST_LANGUAGE);
-
 describe("useTranslate", () => {
     let handler: RenderHookResult<ReturnType<typeof useTranslate>, void>;
 
     beforeEach(() => {
+        $language.set(TEST_LANGUAGE);
+
         handler = renderHook(() => useTranslate(TEST_NAMESPACE));
     });
 

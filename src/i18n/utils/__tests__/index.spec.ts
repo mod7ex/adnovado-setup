@@ -1,4 +1,4 @@
-import { Dictionary, Language, preferred_supported_language } from "~/i18n/utils";
+import { Dictionary, Language, preferred_supported_language, $language } from "~/i18n/utils";
 import { TEST_LANGUAGE, TEST_NAMESPACE, TEST_PAYLOAD } from "~/mocks/i18n";
 
 /**
@@ -34,6 +34,10 @@ describe("Dictionary class", () => {
 
     let $dictionary = new Dictionary(new Language());
 
+    test("existence of one and unique instance <Singleton pattern>", () => {
+        expect($dictionary).toBe(new Dictionary(new Language()));
+    });
+
     test("language is by default preferred_supported_language", () => {
         expect($dictionary.language).toBe(preferred_supported_language());
     });
@@ -49,6 +53,8 @@ describe("Dictionary class", () => {
     });
 
     it("loads payloads successfully based on the provided namespace", async () => {
+        $dictionary.set_language(TEST_LANGUAGE);
+
         await $dictionary.load(TEST_NAMESPACE);
 
         // don't use toBe because there was a deep clone after <await response.json()> so not same reference
