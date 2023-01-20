@@ -13,8 +13,9 @@ const Provider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const set_language = useCallback((language: SUPPORTED_LANGUAGES) => {
         try {
             $language.set(language);
-        } finally {
             _set(language);
+        } catch {
+            alert("Couldn't change language");
         }
     }, []);
 

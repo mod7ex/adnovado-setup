@@ -10,6 +10,10 @@ import { $language } from "./src/i18n/utils";
 */
 
 global.fetch = fetch;
+global.alert = function (message?: any) {
+    console.log("[WINDOW ALERT] ------------------> ");
+    throw Error(JSON.stringify(message));
+};
 global.localStorage = new LocalStorageMock();
 
 beforeAll(() => {

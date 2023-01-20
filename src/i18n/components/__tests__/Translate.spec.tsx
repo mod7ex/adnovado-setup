@@ -2,72 +2,66 @@ import { Translate, $language, FALLBACK_MESSAGE, useLanguage } from "~/i18n";
 import { waitFor, render, screen, userEvent } from "~/../test-utils";
 import { TEST_LANGUAGE, TEST_NAMESPACE, TEST_PAYLOAD, OTHER_TEST_LANGUAGE, OTHER_TEST_PAYLOAD } from "~/mocks/i18n";
 
-// const Consumer = () => {
-//     const { set_language, language } = useLanguage();
+const TestComponent = () => {
+    const { set_language, language } = useLanguage();
 
-//     return (
-//         <Translate ns={TEST_NAMESPACE}>
-//             {({ $t, i18n, payload }) => (
-//                 <div>
-//                     <h1>{language}</h1>
+    return (
+        <Translate ns={TEST_NAMESPACE}>
+            {({ $t, i18n }) => (
+                <>
+                    <h1>{language}</h1>
 
-//                     <h3>{i18n("key.nested")}</h3>
-//                     <h3>{$t((v) => v.key.nested)}</h3>
+                    <h3>{i18n("key.nested")}</h3>
 
-//                     <p>{i18n("some.none.existing.path")}</p>
-//                     <p>{$t((v) => v.some.none.existing.key)}</p>
+                    <h3>{$t((v) => v.key.nested)}</h3>
 
-//                     <button onClick={() => set_language(OTHER_TEST_LANGUAGE)}>switch language</button>
+                    <p role={"paragraph"}>{i18n("some.none.existing.path")}</p>
 
-//                     <div>{JSON.stringify(payload)}</div>
-//                 </div>
-//             )}
-//         </Translate>
-//     );
-// };
+                    <p role={"paragraph"}>{$t((v) => v.some.none.existing.key)}</p>
+
+                    <button onClick={() => set_language(OTHER_TEST_LANGUAGE)}>switch language</button>
+                </>
+            )}
+        </Translate>
+    );
+};
 
 describe("Translate", () => {
-    // beforeEach(() => {
-    //     $language.set(TEST_LANGUAGE);
+    test("Correct workflow", async () => {
+        $language.set(TEST_LANGUAGE);
 
-    //     render(<Consumer />);
-    // });
+        render(<TestComponent />);
 
-    it("Translates correctly", async () => {
+        const languageContainer = screen.getByRole("heading", { level: 1 });
+
+        const switcher = screen.getByRole("button");
+
         await waitFor(() => {
-            // screen.debug();
+            expect(languageContainer).toHaveTextContent(TEST_LANGUAGE);
 
-            // const languageContainer = screen.getByRole("heading", { level: 1 });
+            screen.getAllByRole("heading", { level: 3 }).forEach((item) => {
+                expect(item).toHaveTextContent(TEST_PAYLOAD.key.nested);
+            });
 
-            // expect(languageContainer).toHaveTextContent(TEST_LANGUAGE);
+            screen.getAllByRole("paragraph").forEach((item, i) => {
+                if (i === 0) expect(item).toHaveTextContent("_");
+                else expect(item).toHaveTextContent(FALLBACK_MESSAGE);
+            });
+        });
 
-            // screen.getAllByRole("heading").forEach((item) => {
-            //     expect(item).toHaveTextContent(TEST_PAYLOAD.key.nested);
-            // });
+        await userEvent.click(switcher);
 
-            // screen.getAllByRole("paragraph").forEach((item, i) => {
-            //     if (i === 0) expect(item).toHaveTextContent("_");
-            //     else expect(item).toHaveTextContent(FALLBACK_MESSAGE);
-            // });
+        await waitFor(() => {
+            expect(languageContainer).toHaveTextContent(OTHER_TEST_LANGUAGE);
 
-            expect(1).toBe(1);
+            screen.getAllByRole("heading", { level: 3 }).forEach((item) => {
+                expect(item).toHaveTextContent(OTHER_TEST_PAYLOAD.key.nested);
+            });
+
+            screen.getAllByRole("paragraph").forEach((item, i) => {
+                if (i === 0) expect(item).toHaveTextContent("_");
+                else expect(item).toHaveTextContent(FALLBACK_MESSAGE);
+            });
         });
     });
-
-    // it("Switches the language correctly", async () => {
-    //     const switcher = screen.getByRole("button");
-
-    //     await userEvent.click(switcher);
-
-    //     await waitFor(() => {
-    //         screen.getAllByRole("heading").forEach((item) => {
-    //             expect(item).toHaveTextContent(OTHER_TEST_PAYLOAD.key.nested);
-    //         });
-
-    //         screen.getAllByRole("paragraph").forEach((item, i) => {
-    //             if (i === 0) expect(item).toHaveTextContent("_");
-    //             else expect(item).toHaveTextContent(FALLBACK_MESSAGE);
-    //         });
-    //     });
-    // });
 });
