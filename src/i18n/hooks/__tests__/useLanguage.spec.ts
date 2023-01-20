@@ -14,12 +14,12 @@ describe("useLanguage", () => {
         expect(handler.result.current.language).toBe(preferred_supported_language());
     });
 
-    it("is able to set language", async () => {
+    it("is able to set language (state & localStorage)", async () => {
         act(() => {
             handler.result.current.set_language(TEST_LANGUAGE);
         });
 
         expect(handler.result.current.language).toBe(TEST_LANGUAGE);
-        expect(handler.result.current.language).toBe($language.get());
+        expect($language.hard).toBe(TEST_LANGUAGE);
     });
 });

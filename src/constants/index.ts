@@ -6,6 +6,7 @@ export const MODE = {
 };
 
 export const HOSTNAME = import.meta.env.VITE_HOSTNAME;
+export const APP_NAME = import.meta.env.VITE_APP_TITLE;
 
 export enum PAGES {
     AUTH = "Auth",

@@ -2,6 +2,8 @@ import { AppLink, AppNavLink, PAGES } from "~/router";
 import styles from "~/assets/scss/modules/inner.module.scss";
 import Icon from "~/components/icon";
 import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
+import { APP_NAME } from "~/constants";
+import useRenderCount from "~/hooks/useRenderCount";
 
 type RawProps = React.ComponentPropsWithoutRef<"nav">;
 
@@ -38,8 +40,7 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                             <li key={i}>
                                 {disabled ? (
                                     <span className={classHandler({ disabled, isActive: false })}>
-                                        <Icon name={icon} disabled={disabled} />
-                                        <p>{i18n(label)}</p>
+                                        <Icon name={icon} disabled={disabled} /> <p>{i18n(label)}</p>
                                     </span>
                                 ) : (
                                     <AppNavLink className={classHandler} to={{ name }}>
@@ -50,7 +51,9 @@ const NavBar: React.FC<RawProps> = ({ ...props }) => {
                         ))}
                     </ul>
                     <div className={styles.footer}>
-                        <p>Copyright &#169;{new Date().getFullYear()} adnovado</p>
+                        <p>
+                            Copyright &#169;{new Date().getFullYear()} {APP_NAME.toLowerCase()}
+                        </p>
                     </div>
                 </nav>
             )}

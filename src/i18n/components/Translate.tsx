@@ -1,4 +1,4 @@
-import { useTranslate, DICTIONARY_NAMESPACES } from "~/i18n";
+import { useTranslate } from "~/i18n";
 
 type Props = {
     children: (args: ReturnType<typeof useTranslate>) => React.ReactNode;

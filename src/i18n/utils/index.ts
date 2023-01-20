@@ -175,6 +175,14 @@ export class Language {
         return _language as SUPPORTED_LANGUAGES;
     }
 
+    get hard() {
+        return localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY);
+    }
+
+    get soft() {
+        return this.state!;
+    }
+
     set(v: SUPPORTED_LANGUAGES) {
         localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, v);
 

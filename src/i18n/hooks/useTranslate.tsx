@@ -9,15 +9,13 @@ type NS = DICTIONARY_NAMESPACES | ((payload: Record<keyof typeof DICTIONARY_NAME
 const useTranslate = (name_space: NS, dependencies: DependencyList = []) => {
     const { language } = useLanguage();
 
+    const [namespace_payload, set] = useState<ReturnType<typeof $dictionary.get>>();
+
     const _namespace = useMemo(() => {
-        if (isFunction(name_space)) {
-            return name_space(DICTIONARY_NAMESPACES) as DICTIONARY_NAMESPACES;
-        }
+        if (isFunction(name_space)) return name_space(DICTIONARY_NAMESPACES) as DICTIONARY_NAMESPACES;
 
         return name_space;
     }, [name_space]);
-
-    const [namespace_payload, set] = useState($dictionary.get(_namespace));
 
     useEffect(() => {
         $dictionary.load(_namespace).then((v) => set(v));
@@ -27,11 +25,7 @@ const useTranslate = (name_space: NS, dependencies: DependencyList = []) => {
         (dictionary_path: string, fallback = "_") => {
             if (!namespace_payload) return fallback;
 
-            const _translation = getNestedValue(namespace_payload, dictionary_path.split("."));
-
-            // console.log(`[${dictionary_path}] :${_translation}, [NS]: ${namespace_payload}`);
-
-            return _translation || fallback;
+            return getNestedValue(namespace_payload, dictionary_path.split(".")) || fallback;
         },
         [namespace_payload]
     );
@@ -41,6 +35,7 @@ const useTranslate = (name_space: NS, dependencies: DependencyList = []) => {
     return {
         i18n,
         $t,
+        ready: namespace_payload != null,
     };
 };
 

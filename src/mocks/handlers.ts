@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import i18nHandler from "~/mocks/i18n";
+import i18nHandlers from "~/mocks/i18n";
 
 export const users = [
     { id: 0, name: "Mourad" },
@@ -11,5 +11,5 @@ export const handlers = [
     rest.get("https://jsonplaceholder.typicode.com/users", (_, res, ctx) => {
         return res(ctx.status(200), ctx.json(users));
     }),
-    i18nHandler,
+    ...i18nHandlers,
 ];

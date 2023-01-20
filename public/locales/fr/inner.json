@@ -8,8 +8,9 @@
 
     "sidebar": {
         "menu": {
-            "listings": "Listings",
-            "orders": "Orders",
+            "listings": "Annonces",
+            "users": "Utilisateurs",
+            "customers": "Clients",
             "settings": "Paramètre",
             "help": "Aide"
         }
