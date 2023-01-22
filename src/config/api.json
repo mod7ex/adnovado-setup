@@ -1,0 +1,4 @@
+{
+    "ME": "/auth/me",
+    "CUSTOMER": "/customers/:id"
+}

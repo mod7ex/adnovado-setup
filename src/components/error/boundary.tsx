@@ -2,7 +2,7 @@ import React from "react";
 import styles from "~/assets/scss/modules/boundary.module.scss";
 import ErrorSVG from "@/svg/Error";
 import { Translate, DICTIONARY_NAMESPACES } from "~/i18n";
-import { logger } from "~/utils";
+import { logger } from "~/modules";
 
 interface Props {
     children: React.ReactNode;

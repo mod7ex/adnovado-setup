@@ -1,13 +1,6 @@
 import { routes } from "~/router/router";
-import { trimChar } from "~/utils";
+import { app_join, replaceParams } from "~/utils";
 import { PAGES } from "~/constants";
-
-export const app_join = (payload: string[]) => {
-    return payload
-        .filter((v) => !!v)
-        .map((v) => trimChar(v, "/"))
-        .join("/");
-};
 
 interface IRoute {
     name?: string;
@@ -62,11 +55,7 @@ export const resolve_payload = (payload: ITo) => {
 
     let _path = resolve(name);
 
-    if (params) {
-        Object.entries(params).forEach(([key, val]) => {
-            _path = _path.replace(`:${key}`, val);
-        });
-    }
+    if (params) _path = replaceParams(_path, params);
 
     if (query) {
         const _query = new URLSearchParams(query).toString();

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, type DependencyList } from "react";
 import useToggle from "~/hooks/useToggle";
-import { logger } from "~/utils";
+import { logger } from "~/modules";
 
 export default function useAsync<T, Er = unknown>(fn: () => Promise<T>, dependecies: DependencyList = []) {
     const [pending, toggle] = useToggle(false);

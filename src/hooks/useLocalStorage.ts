@@ -1,6 +1,6 @@
 import { useState, useDeferredValue, useEffect } from "react";
 import { isFunction } from "~/utils/types";
-import { logger } from "~/utils";
+import { logger } from "~/modules";
 
 function getStoredValue<T>(key: string, initialValue: ValueOrGenerator<T>) {
     const savedValue = localStorage.getItem(key);

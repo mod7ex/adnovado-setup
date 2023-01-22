@@ -1,7 +1,7 @@
 import { useRouteError, useNavigate } from "react-router-dom";
 import styles from "~/assets/scss/modules/boundary.module.scss";
 import ErrorSVG from "@/svg/Error";
-import { logger } from "~/utils";
+import { logger } from "~/modules";
 
 export const Boundary: React.FC<{ message?: string }> = ({ message = "Opps! page not found (Go home)" }) => {
     let error = useRouteError();

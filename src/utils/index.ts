@@ -3,14 +3,6 @@ export const scheduleTask = (job: Parameters<typeof setTimeout>[0], tm = 0) => {
     return setTimeout(job, tm);
 };
 
-// export const catchErr = (fn: Tfunction, catcher: (e: unknown) => any) => {
-//     try {
-//         return fn();
-//     } catch (e: unknown) {
-//         return catcher(e);
-//     }
-// };
-
 export const trimChar = (payload: string, target: string): string => {
     if (!payload) return payload;
 
@@ -20,6 +12,30 @@ export const trimChar = (payload: string, target: string): string => {
 
     return payload;
 };
+
+export type ApiPayload = Record<Numberish, Numberish | boolean>;
+
+export const app_join = (payload: string[], separator = "/") => {
+    return payload
+        .filter((v) => !!v)
+        .map((v) => trimChar(v, "/"))
+        .join(separator);
+};
+
+export const replaceParams = (_path: string, params: ApiPayload) => {
+    Object.entries(params).forEach(([key, val]) => {
+        _path = _path.replace(`:${key}`, val.toString());
+    });
+
+    return _path;
+};
+
+export const queryToString = (payload: ApiPayload) => {
+    // @ts-ignore
+    return new URLSearchParams(payload ?? undefined).toString();
+};
+
+// --------------------------------------------------------
 
 export const fail = <T extends string>(msg: T) => {
     throw Error(msg);
@@ -83,6 +99,29 @@ export const trace = () => {
     }
 };
 
+type Payload = { fn: (...args: any[]) => any; count: number; delay: number };
+
+export const retry = ({ fn, count, delay }: Payload) => {
+    let current = 0;
+
+    return async () => {
+        while (true) {
+            try {
+                fn();
+                break;
+            } catch (error: any) {
+                current++;
+
+                if (current > count) {
+                    console.log("Retry maximum reached. Exiting");
+                    break;
+                }
+            }
+
+            if (delay != null) await sleep(delay);
+        }
+    };
+};
+
 export { close, open } from "~/utils/full-screen";
-export { default as logger } from "~/utils/logger";
 export * from "~/utils/types";

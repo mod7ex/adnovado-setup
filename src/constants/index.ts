@@ -5,7 +5,10 @@ export const MODE = {
     STRICT_DEV: import.meta.env.DEV && !(import.meta.env.TEST_MODE === "true"),
 };
 
+export const API_HOSTNAME = import.meta.env.VITE_API_HOSTNAME;
+
 export const HOSTNAME = import.meta.env.VITE_HOSTNAME;
+
 export const APP_NAME = import.meta.env.VITE_APP_TITLE;
 
 export enum PAGES {

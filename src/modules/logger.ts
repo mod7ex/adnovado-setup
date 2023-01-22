@@ -9,12 +9,12 @@ type WarnArgs = Parameters<typeof warn>;
 type ErrorArgs = Parameters<typeof error>;
 
 class Logger {
-    private instance: Logger | null = null;
+    private static instance: Logger | null = null;
 
     constructor() {
-        if (!this.instance) this.instance = this;
+        if (!Logger.instance) Logger.instance = this;
 
-        return this.instance;
+        return Logger.instance;
     }
 
     log(...args: LogArgs) {
