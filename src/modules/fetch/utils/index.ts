@@ -152,7 +152,9 @@ export const createAbortion = ({ timeout, auto = true, reason }: AbortionOptions
 
     if (auto) schedule();
 
+    const signal = controller.signal;
+
     const clear = () => clearTimeout(timerId);
 
-    return { controller, clear, schedule, abort };
+    return { signal, clear, schedule, abort };
 };

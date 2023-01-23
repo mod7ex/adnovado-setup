@@ -1,8 +1,11 @@
 import API from "~/config/api.json";
-import { app_join, replaceParams, trimChar, queryToString, type ApiPayload } from "~/utils";
 import { API_HOSTNAME } from "~/constants";
+import { app_join, replaceParams, trimChar, queryToString, type ApiPayload } from "~/utils";
+import { AppURL, createAbortion } from "~/modules/fetch/utils";
 
-type RequestIdentifier = string;
+type Data = object;
+
+const REQUEST_TIMEOUT = 1000;
 
 enum HttpMethod {
     GET = "GET",
@@ -17,41 +20,25 @@ enum MutationHttpMethod {
     DELETE = "DELETE",
 }
 
-const createRequest = (input: RequestInfo | URL, options?: RequestInit) => {
-    return new Request(input, options);
-};
+type RequestIdentifier = string;
 
-export const createQuery = (input: RequestInfo | URL, options?: Omit<RequestInit, "method">) => {
-    return createRequest(input, {
-        method: HttpMethod.GET,
-        ...options,
-    });
-};
-
-interface MutationInit extends RequestInit {
-    method: MutationHttpMethod;
+interface IRequestInit {
+    key?: RequestIdentifier; // none-existence means no-cahce
+    timeout?: number;
+    params: ApiPayload;
+    raw: RequestInit;
 }
 
-export const createMutation = (input: RequestInfo | URL, options?: MutationInit) => {
-    return createRequest(input, {
-        method: HttpMethod.GET,
-        ...options,
-    });
-};
+interface MutationInit extends IRequestInit {
+    raw: Omit<RequestInit, "method"> & { method: MutationHttpMethod };
+}
 
-interface IRawRequestOptions<M extends HttpMethod> {
-    base_url?: string;
-    path?: string;
-    timeout?: number;
-    params?: Record<string, Numberish | boolean>;
-    key?: RequestIdentifier;
-    raw_options?: RequestInit;
-    method?: M;
-    remember?: boolean;
+interface QueryInit extends IRequestInit {
+    raw: Omit<RequestInit, "method" | "body">;
 }
 
 type Result<T extends Data, E = unknown> =
-    | { success: false; error: E; message: string; key?: RequestIdentifier }
+    | { success: false; error?: E; message: string; key?: RequestIdentifier }
     | {
           data: T;
           success: true;
@@ -59,79 +46,96 @@ type Result<T extends Data, E = unknown> =
           key?: RequestIdentifier;
       };
 
-type Data = object;
-
-const prepare_request = <M extends HttpMethod>(options?: IRawRequestOptions<M>) => {
-    return options;
+export const headers = (options?: object) => {
+    return new Headers({
+        "Content-Type": "application/json",
+        // 'Content-Length': options?.body?.toString().length,
+    });
 };
 
-// https://www.google.com/search?sxsrf=AJOqlzUWU7oqSsFKfcjCNz6EXYDCDFSM-A:1674332382846&q=uri+format+example&tbm=isch&source=univ&fir=RyZ11vGDmqtY2M%252Cu6wBM4mGe1lJQM%252C_%253BDPbLSSiMeKKWkM%252C20coLy3_SgiVnM%252C_%253BhUiy4tPWjzNqTM%252C_bXtxhhE4cXo8M%252C_%253BO1d3rqFW2TY1mM%252C5_K13DA-ZKUHtM%252C_%253BQkBeBY6YzC1f8M%252C7RjzEqqnH82qYM%252C_%253BMymrGoTvY-R-OM%252CGz-mY1fb5b8OOM%252C_%253BRqwFsy2VjT7itM%252CfcsxM8eaHtSUtM%252C_%253BBdtEisE-ir0L0M%252C_d73A76x20RuKM%252C_%253B9ljIrzuAQJBE5M%252C_bXtxhhE4cXo8M%252C_%253BRtnudQtks2gRoM%252CeXv9z51oUqFKfM%252C_&usg=AI4_-kTna6-VgCGhojFEkqSvJUIQIALWIQ&sa=X&ved=2ahUKEwjQi6mXvtn8AhX5RfEDHSzFBv0Q7Al6BAgIEFQ&biw=1866&bih=948&dpr=1
+abstract class IRequest {
+    constructor(protected _end_point: AppURL | RequestInfo | URL, protected _state?: IRequestInit) {}
 
-// const end_point = ({ base, params, path, search }: IEndPoint) => {
-//     // still have to add protocol, port ...,
+    static headers = (options?: Record<string, string>) => {
+        return new Headers({
+            "Content-Type": "application/json",
+            ...options,
+        });
+    };
 
-//     const _base = base ?? API_HOSTNAME;
+    static check_response(response: Response) {
+        // the PHP be-like
 
-//     let _path = path ?? "/";
-//     _path = params ? replaceParams(_path, params) : _path;
+        if (response.ok) return;
 
-//     // let _end_point = app_join([_base, _path]);
+        if (response.status === 404) throw new TypeError("Page not found");
 
-//     if (search) _path += `?${queryToString(search)}`;
+        throw new TypeError("Network response was not OK");
+    }
+}
 
-//     return new URL(_path, _base);
-// };
+export class Query extends IRequest {
+    constructor(_end_point: AppURL | RequestInfo | URL, _state?: QueryInit) {
+        super(_end_point, _state);
+    }
 
-// export const $query = async <T extends Data, E = unknown>(options?: IRawRequestOptions<HttpMethod.GET>) => {
-//     const { base_url, key, params, path, raw_options, remember, timeout } = options!;
+    request({ signal }: { signal?: AbortSignal }) {
+        let _end_point = this._end_point;
 
-//     const _request = createQuery("");
-// };
+        if (_end_point instanceof AppURL) {
+            const _href = _end_point.href;
+            if (_href) _end_point = _href;
+            else throw Error("Invalid end-point");
+        }
 
-export const raw_request = async <M extends HttpMethod, T extends Data, E = unknown>(options?: IRawRequestOptions<M>) /* : Promise<Result<T, E>> */ => {
-    // if (_key) {
-    //     const cached_response = getCachedResponse(_key);
-    //     if (cached_response) {
-    //         if (Date.now() - cached_response.timestamp < DEFAULTS.CACHE_TTL)
-    //             // cache is still valide
-    //             return responseToSuccessResult<T>(cached_response.response, _key);
-    //         else {
-    //             clearCachedResponse(_key); // the key existed for more than an hour
-    //         }
-    //     }
-    // }
-    // // generate a random key in case of a none-provided key beside the wish of remembering the request or caching the response
-    // const key = (cache || remember) && !_key ? uuid() : _key;
-    // if (remember) store_request(payload!, key);
-    // const end_point = path_join(base_url!, path!);
-    // const query = params ? payload_to_query(params) : "";
-    // const { controller, clear } = createAbortion({
-    //     timeout: timeout!,
-    //     reason: "Request timeout exceeded",
-    // });
-    // const headers = {
-    //     ...default_headers(options),
-    //     ...options?.headers,
-    // };
-    // const _options: RequestInit = {
-    //     // keep same order !
-    //     signal: controller.signal,
-    //     method: method,
-    //     // @ts-ignore
-    //     body: payload?.data,
-    //     ...options,
-    //     headers,
-    // };
-    // try {
-    //     const response = await fetch(end_point + query, _options);
-    //     checkResponse(response);
-    //     // cache only on a success response
-    //     if (cache) cacheResponse(key!, response);
-    //     return responseToSuccessResult<T>(response, key);
-    // } catch (error: any) {
-    //     console.error("[request error]: ", error);
-    //     return { error, message: errMsg(error), success: false, key };
-    // } finally {
-    //     clear();
-    // }
-};
+        const _options: RequestInit = {
+            method: HttpMethod.GET,
+            headers: Query.headers(),
+            signal,
+            ...this._state?.raw,
+        };
+
+        return new Request(_end_point, _options);
+    }
+
+    extract() {
+        return {
+            exe: () => this.exe(),
+            cancel: () => {},
+        };
+    }
+
+    exe = async <T extends Data, E = unknown>(): Promise<Result<T, E>> => {
+        const key = this._state?.key;
+
+        const { clear, signal } = createAbortion({ timeout: REQUEST_TIMEOUT, reason: "Timeout exceeded" });
+
+        try {
+            const response = await fetch(this.request({ signal }));
+
+            Query.check_response(response);
+
+            // handel cache
+
+            const data = <T>await response.json();
+
+            return {
+                data,
+                success: true,
+                response,
+                key,
+            };
+        } catch (e: unknown) {
+            let error = e as E;
+
+            return {
+                error,
+                success: false,
+                message: (e as Error)?.message ?? "Something went wrong",
+                key,
+            };
+        } finally {
+            clear();
+        }
+    };
+}
