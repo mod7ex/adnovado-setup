@@ -1,5 +1,7 @@
 import { type ApiPayload, trimChar } from "~/utils";
 
+// ------------------------------------------------------------------------------------------------------------ AppURL
+
 export interface IUriPayload {
     protocol?: string; // "https:" | "http:" | ""
     username?: string;
@@ -130,7 +132,7 @@ export class AppURL {
     }
 }
 
-// --------------------------- Request Abortion
+// ------------------------------------------------------------------------------------------------------------ Request Abortion
 
 interface AbortionOptions {
     timeout: number;
@@ -141,7 +143,6 @@ interface AbortionOptions {
 export const createAbortion = ({ timeout, auto = true, reason }: AbortionOptions) => {
     const controller = new AbortController();
 
-    // @ts-ignore
     let timerId: NodeJS.Timeout | undefined;
 
     const abort = (_reason?: any) => controller.abort(_reason ?? reason);
@@ -154,7 +155,9 @@ export const createAbortion = ({ timeout, auto = true, reason }: AbortionOptions
 
     const signal = controller.signal;
 
-    const clear = () => clearTimeout(timerId);
+    const clear = () => {
+        timerId && clearTimeout(timerId);
+    };
 
     return { signal, clear, schedule, abort };
 };

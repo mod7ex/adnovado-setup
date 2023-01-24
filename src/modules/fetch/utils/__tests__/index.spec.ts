@@ -1,34 +1,7 @@
-import { AppURL, IUriPayload } from "~/modules/fetch/utils";
+import { AppURL } from "~/modules/fetch/utils";
+import { mockTestUrl } from "~/mocks/utils";
 
-const toSearchString = (v: IUriPayload["search"]) => {
-    // @ts-ignore
-    if (v) return `?${new URLSearchParams(v ?? undefined).toString()}`;
-    return "";
-};
-
-const hash = "hash";
-const port = 8000;
-const hostname = "www.example.com";
-const password = "password";
-const username = "username";
-const protocol = "https";
-const pathname = "/some/path";
-const search = { query: true };
-
-const host = `${hostname}:${port}`;
-const href = `${protocol}://${username}:${password}@${hostname}:${port}${pathname}${toSearchString(search)}#${hash}`;
-const origin = `${protocol}://${hostname}:${port}`;
-
-const TEST_PAYLOAD = {
-    hash,
-    hostname,
-    port,
-    password,
-    username,
-    protocol,
-    pathname,
-    search,
-};
+const { TEST_PAYLOAD, href, host } = mockTestUrl();
 
 describe("AppURL class", () => {
     it("works correctly", () => {
@@ -59,8 +32,8 @@ describe("AppURL class", () => {
             } else expect(Reflect.get(url, key)).toBe(val);
         });
 
+        expect(url.href).toBeUndefined();
         expect(`${url}`).toBe(`undefined`);
         expect(url.toString()).toBe(``);
-        expect(url.href).toBeUndefined();
     });
 });

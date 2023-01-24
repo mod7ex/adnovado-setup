@@ -3,9 +3,11 @@ import { API_HOSTNAME } from "~/constants";
 import { app_join, replaceParams, trimChar, queryToString, type ApiPayload } from "~/utils";
 import { AppURL, createAbortion } from "~/modules/fetch/utils";
 
-type Data = object;
+type ResponseData = object;
 
 const REQUEST_TIMEOUT = 1000;
+
+const ABORTION_REASON = "Timeout exceeded";
 
 enum HttpMethod {
     GET = "GET",
@@ -20,10 +22,7 @@ enum MutationHttpMethod {
     DELETE = "DELETE",
 }
 
-type RequestIdentifier = string;
-
 interface IRequestInit {
-    key?: RequestIdentifier; // none-existence means no-cahce
     timeout?: number;
     params: ApiPayload;
     raw: RequestInit;
@@ -37,26 +36,30 @@ interface QueryInit extends IRequestInit {
     raw: Omit<RequestInit, "method" | "body">;
 }
 
-type Result<T extends Data, E = unknown> =
-    | { success: false; error?: E; message: string; key?: RequestIdentifier }
+type Result<T extends ResponseData, E = unknown> =
+    | { success: false; error?: E; message: string }
     | {
           data: T;
           success: true;
           response: Response;
-          key?: RequestIdentifier;
       };
 
-export const headers = (options?: object) => {
-    return new Headers({
-        "Content-Type": "application/json",
-        // 'Content-Length': options?.body?.toString().length,
-    });
+type ExeProps = {
+    abortion?: Pick<ReturnType<typeof createAbortion>, "signal" | "clear">;
+    timeout?: number;
 };
+
+type ExtractProps = {
+    timeout?: number;
+    reason?: any;
+};
+
+type HeadersPayload = Record<string, string>;
 
 abstract class IRequest {
     constructor(protected _end_point: AppURL | RequestInfo | URL, protected _state?: IRequestInit) {}
 
-    static headers = (options?: Record<string, string>) => {
+    static headers = (options?: HeadersPayload) => {
         return new Headers({
             "Content-Type": "application/json",
             ...options,
@@ -72,14 +75,8 @@ abstract class IRequest {
 
         throw new TypeError("Network response was not OK");
     }
-}
 
-export class Query extends IRequest {
-    constructor(_end_point: AppURL | RequestInfo | URL, _state?: QueryInit) {
-        super(_end_point, _state);
-    }
-
-    request({ signal }: { signal?: AbortSignal }) {
+    request({ signal, headers }: { signal?: AbortSignal; headers?: HeadersPayload }) {
         let _end_point = this._end_point;
 
         if (_end_point instanceof AppURL) {
@@ -88,54 +85,78 @@ export class Query extends IRequest {
             else throw Error("Invalid end-point");
         }
 
-        const _options: RequestInit = {
+        return new Request(_end_point, {
             method: HttpMethod.GET,
-            headers: Query.headers(),
+            headers: Query.headers(headers),
             signal,
             ...this._state?.raw,
-        };
-
-        return new Request(_end_point, _options);
+        });
     }
 
-    extract() {
-        return {
-            exe: () => this.exe(),
-            cancel: () => {},
-        };
-    }
+    exe = async <T extends ResponseData, E = unknown>({ abortion, timeout }: ExeProps = {}): Promise<Result<T, E>> => {
+        if (!abortion) abortion = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
 
-    exe = async <T extends Data, E = unknown>(): Promise<Result<T, E>> => {
-        const key = this._state?.key;
-
-        const { clear, signal } = createAbortion({ timeout: REQUEST_TIMEOUT, reason: "Timeout exceeded" });
+        const signal = abortion.signal;
+        const clear = abortion.clear;
 
         try {
             const response = await fetch(this.request({ signal }));
 
             Query.check_response(response);
 
-            // handel cache
-
-            const data = <T>await response.json();
+            const data = <T>await response.json(); // ...
 
             return {
                 data,
                 success: true,
                 response,
-                key,
             };
-        } catch (e: unknown) {
+        } catch (e) {
             let error = e as E;
 
             return {
                 error,
                 success: false,
                 message: (e as Error)?.message ?? "Something went wrong",
-                key,
             };
         } finally {
             clear();
         }
     };
+
+    extract(args: ExtractProps = {}) {
+        let timeout = args.timeout ?? REQUEST_TIMEOUT;
+        let reason = args.reason ?? ABORTION_REASON;
+
+        const { abort, clear, schedule, signal } = createAbortion({ timeout, reason, auto: false });
+
+        let isStarted = false;
+
+        return {
+            exe: <T extends ResponseData, E = unknown>(_args: ExtractProps = {}) => {
+                isStarted = true;
+
+                schedule(_args.timeout, _args.reason);
+
+                return this.exe<T, E>({ abortion: { signal, clear } });
+            },
+            cancel: (reason?: any) => {
+                isStarted && abort(reason);
+            },
+        };
+    }
 }
+
+export class Query extends IRequest {
+    constructor(_end_point: AppURL | RequestInfo | URL, _state?: QueryInit) {
+        super(_end_point, _state);
+    }
+}
+
+export class Mutation extends IRequest {
+    constructor(_end_point: AppURL | RequestInfo | URL, _state?: MutationInit) {
+        super(_end_point, _state);
+    }
+}
+
+export * from "~/modules/fetch/utils";

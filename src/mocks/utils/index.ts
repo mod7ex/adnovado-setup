@@ -48,4 +48,43 @@ export class LocalStorageMock {
     }
 }
 
+export const mockTestUrl = () => {
+    const hash = "hash";
+    const port = 8000;
+    const hostname = "www.example.com";
+    const password = "password";
+    const username = "username";
+    const protocol = "https";
+    const pathname = "/some/random/path";
+    const search = { query: true };
+
+    const queryString = (() => {
+        // @ts-ignore
+        return `?${new URLSearchParams(search).toString()}`;
+    })();
+
+    const host = `${hostname}:${port}`;
+    const href = `${protocol}://${username}:${password}@${hostname}:${port}${pathname}${queryString}#${hash}`;
+    const origin = `${protocol}://${hostname}:${port}`;
+
+    const TEST_PAYLOAD = {
+        hash,
+        hostname,
+        port,
+        password,
+        username,
+        protocol,
+        pathname,
+        search,
+    };
+
+    return {
+        TEST_PAYLOAD,
+        host,
+        href,
+        origin,
+        queryString,
+    };
+};
+
 export { createMemoryRouter as createRouter } from "react-router-dom";
