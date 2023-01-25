@@ -1,3 +1,5 @@
+import { payloadToUrlString, IUriPayload, payloadToQueryString, payloadToHostString, payloadToOriginString } from "~/modules/fetch";
+
 export enum LOCAL_STORAGE_DEFAULTS {
     KEY = "test key",
     VALUE = "test value",
@@ -48,42 +50,29 @@ export class LocalStorageMock {
     }
 }
 
-export const mockTestUrl = () => {
-    const hash = "hash";
-    const port = 8000;
-    const hostname = "www.example.com";
-    const password = "password";
-    const username = "username";
-    const protocol = "https";
-    const pathname = "/some/random/path";
-    const search = { query: true };
-
-    const queryString = (() => {
-        // @ts-ignore
-        return `?${new URLSearchParams(search).toString()}`;
-    })();
-
-    const host = `${hostname}:${port}`;
-    const href = `${protocol}://${username}:${password}@${hostname}:${port}${pathname}${queryString}#${hash}`;
-    const origin = `${protocol}://${hostname}:${port}`;
-
+export const mockTestUrl = (exclude: (keyof IUriPayload)[] = []) => {
     const TEST_PAYLOAD = {
-        hash,
-        hostname,
-        port,
-        password,
-        username,
-        protocol,
-        pathname,
-        search,
+        hash: "hash",
+        port: 8000,
+        hostname: "www.example.com",
+        password: "password",
+        username: "username",
+        protocol: "https:",
+        pathname: "/some/random/path",
+        search: { query: true },
+        ...exclude.reduce((prev, curr) => ({ ...prev, [curr]: undefined }), {}),
     };
 
     return {
         TEST_PAYLOAD,
-        host,
-        href,
-        origin,
-        queryString,
+
+        queryString: payloadToQueryString(TEST_PAYLOAD.search),
+
+        host: payloadToHostString(TEST_PAYLOAD),
+
+        href: payloadToUrlString(TEST_PAYLOAD),
+
+        origin: payloadToOriginString(TEST_PAYLOAD),
     };
 };
 

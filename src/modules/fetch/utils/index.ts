@@ -17,6 +17,64 @@ export interface IUriPayload {
     // origin --> "https://www.foo.com:5000"
 }
 
+export const payloadToHostString = ({ hostname, port }: Pick<IUriPayload, "hostname" | "port">) => {
+    if (hostname) {
+        // @ts-ignore
+        if (port) hostname = +`:${port}`;
+
+        return hostname;
+    }
+};
+
+export const payloadToQueryString = (search?: IUriPayload["search"]) => {
+    // @ts-ignore
+    return new URLSearchParams(search ?? undefined).toString();
+};
+
+export const payloadToOriginString = ({ hostname, port, protocol }: Pick<IUriPayload, "hostname" | "port" | "protocol">) => {
+    const host = payloadToHostString({ hostname, port });
+
+    if (host) {
+        let _origin = host;
+
+        if (protocol) _origin = `${protocol}//${_origin}`;
+
+        return _origin;
+    }
+};
+
+export const payloadToUrlString = (args?: IUriPayload) => {
+    if (!args) return;
+
+    let _url = payloadToHostString(args);
+
+    if (!_url) return;
+
+    let _username = args.username;
+    let _password = args.password;
+
+    if (_password || _username) {
+        const user_info = `${_username}:${_password}`;
+
+        _url = `${user_info}@${_url}`;
+    }
+
+    let _protocol = args.protocol;
+    if (_protocol) _url = `${_protocol}//${_url}`;
+
+    let _pathname = args.pathname;
+    if (_pathname) _url += `/${trimChar(_pathname, "/")}`;
+
+    // @ts-ignore
+    let _search = payloadToQueryString(args.search);
+    if (_search) _url += `?${_search}`;
+
+    let _hash = args.hash;
+    if (_hash) _url += `#${_hash}`;
+
+    return _url;
+};
+
 export class AppURL {
     private _protocol?: IUriPayload["protocol"];
     private _username?: IUriPayload["username"];
@@ -61,39 +119,16 @@ export class AppURL {
     }
 
     get host() {
-        const _hostname = this._hostname;
-
-        if (_hostname) {
-            let _port = this._port ?? "";
-
-            if (_port) _port = `:${_port}`;
-
-            return _hostname + _port;
-        }
+        return payloadToHostString(this);
     }
     get origin() {
-        const _hostname = this._hostname;
-        const _protocol = this._protocol;
-        let _port = this._port ?? "";
-
-        let _origin;
-
-        if (_hostname) {
-            _origin = _hostname;
-
-            if (_protocol) _origin = `${_protocol}://${_origin}`;
-
-            if (_port) _port = `:${_port}`;
-
-            return _origin + _port;
-        }
+        return payloadToOriginString(this);
     }
     get href() {
         return this[Symbol.toPrimitive]();
     }
     get queryString() {
-        // @ts-ignore
-        return new URLSearchParams(this._search ?? undefined);
+        return payloadToQueryString(this._search);
     }
 
     toString() {
@@ -101,34 +136,7 @@ export class AppURL {
     }
 
     [Symbol.toPrimitive]() {
-        let _host = this.host;
-
-        if (!_host) return;
-
-        let _url = _host;
-
-        let _username = this._username;
-        let _password = this._password;
-
-        if (_password || _username) {
-            const user_info = `${_username ?? ""}:${_password ?? ""}`; // to check
-
-            _url = `${user_info}@${_url}`;
-        }
-
-        let _protocol = this._protocol;
-        if (_protocol) _url = `${_protocol}://${_url}`;
-
-        let _pathname = this._pathname;
-        if (_pathname) _url += `/${trimChar(_pathname, "/")}`;
-
-        let _search = this.queryString.toString();
-        if (_search) _url += `?${_search}`;
-
-        let _hash = this._hash;
-        if (_hash) _url += `#${_hash}`;
-
-        return _url;
+        return payloadToUrlString(this);
     }
 }
 

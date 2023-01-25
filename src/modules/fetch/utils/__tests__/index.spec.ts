@@ -1,7 +1,7 @@
 import { AppURL } from "~/modules/fetch/utils";
 import { mockTestUrl } from "~/mocks/utils";
 
-const { TEST_PAYLOAD, href, host } = mockTestUrl();
+const { TEST_PAYLOAD, href, host, origin: _origin } = mockTestUrl();
 
 describe("AppURL class", () => {
     it("works correctly", () => {
@@ -13,7 +13,7 @@ describe("AppURL class", () => {
 
         expect(`${url}`).toBe(href);
         expect(url.toString()).toBe(href);
-        expect(url.origin).toBe(origin);
+        expect(url.origin).toBe(_origin);
         expect(url.href).toBe(href);
         expect(url.host).toBe(host);
     });
