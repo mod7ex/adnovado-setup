@@ -15,8 +15,10 @@ export const handlers = [
     rest.get("https://jsonplaceholder.typicode.com/users", (_, res, ctx) => {
         return res(ctx.status(200), ctx.json(users));
     }),
-    rest.get(href!, (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(users));
+
+    rest.get(href!, async (_, res, ctx) => {
+        return res(ctx.delay(1000), ctx.status(200), ctx.json(users));
     }),
+
     ...i18nHandlers,
 ];

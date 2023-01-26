@@ -4,7 +4,7 @@ import { AppURL, createAbortion } from "~/modules/fetch/utils";
 
 type ResponseData = object;
 
-const REQUEST_TIMEOUT = 1000;
+const REQUEST_TIMEOUT = 2000;
 
 const ABORTION_REASON = "Timeout exceeded";
 
@@ -28,11 +28,11 @@ interface IRequestInit {
 }
 
 interface MutationInit extends IRequestInit {
-    raw: Omit<RequestInit, "method"> & { method: MutationHttpMethod };
+    raw: Omit<RequestInit, "timeout" | "method"> & { method: MutationHttpMethod };
 }
 
 interface QueryInit extends IRequestInit {
-    raw: Omit<RequestInit, "method" | "body">;
+    raw: Omit<RequestInit, "timeout" | "method" | "body">;
 }
 
 type Result<T extends ResponseData, E = unknown> =
@@ -43,17 +43,11 @@ type Result<T extends ResponseData, E = unknown> =
           response: Response;
       };
 
-type ExeProps<T = QueryInit> = {
-    abortion?: Pick<ReturnType<typeof createAbortion>, "signal" | "clear">; // think
+type ExeProps<T = QueryInit["raw"]> = {
     timeout?: number;
     exploit?: <T>(v: Response) => Promise<T>;
     data?: Record<string, any>;
     raw?: T;
-};
-
-type ExtractProps = {
-    timeout?: number;
-    reason?: any;
 };
 
 type HeadersPayload = Record<string, string>;
@@ -138,30 +132,6 @@ abstract class IRequest {
             clear();
         }
     }
-
-    // ----------------------
-
-    // extract(args: ExtractProps = {}) {
-    //     let timeout = args.timeout ?? REQUEST_TIMEOUT;
-    //     let reason = args.reason ?? ABORTION_REASON;
-
-    //     const { abort, clear, schedule, signal } = createAbortion({ timeout, reason, auto: false });
-
-    //     let isStarted = false;
-
-    //     return {
-    //         exe: <T extends ResponseData, E = unknown>(_args: ExtractProps = {}) => {
-    //             isStarted = true;
-
-    //             schedule(_args.timeout, _args.reason);
-
-    //             return this.exe<T, E>({ ..._args, abortion: { signal, clear } });
-    //         },
-    //         cancel: (reason?: any) => {
-    //             isStarted && abort(reason);
-    //         },
-    //     };
-    // }
 }
 
 export class Query extends IRequest {
@@ -172,17 +142,12 @@ export class Query extends IRequest {
     // prettier-ignore
     exe = <T extends ResponseData, E = unknown>(
         {
-            abortion,
             timeout,
             exploit,
             raw
         }: Omit<ExeProps, 'data'>= {}
     ): Promise<Result<T, E>> => {
-        if (!abortion) abortion = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
-
-        const signal = abortion.signal;
-
-        const clear = abortion.clear;
+        const { clear, signal } = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
 
         const init = this.init({ signal, ...raw });
 
@@ -200,13 +165,14 @@ export class Query extends IRequest {
         let isStarted = false;
 
         return {
-            exe: <T extends ResponseData, E = unknown>(args: ExtractProps = {}) => {
+            exe: <T extends ResponseData, E = unknown>(args: Omit<ExeProps, "data"> = {}) => {
                 isStarted = true;
 
-                schedule(args.timeout, args.reason);
+                schedule(args.timeout);
 
-                return this.exe<T, E>({ ...args, abortion: { signal, clear } });
+                return this.exe<T, E>({ ...args, raw: { signal, ...args.raw } });
             },
+
             cancel: (reason?: any) => {
                 isStarted && abort(reason);
             },
@@ -214,10 +180,53 @@ export class Query extends IRequest {
     }
 }
 
-// export class Mutation extends IRequest {
-//     constructor(_end_point: AppURL | string, _state?: MutationInit) {
-//         super(_end_point, _state);
-//     }
-// }
+export class Mutation extends IRequest {
+    constructor(_end_point: AppURL | string, _state?: MutationInit) {
+        super(_end_point, _state);
+    }
+
+    // prettier-ignore
+    exe = <T extends ResponseData, E = unknown>(
+        {
+            timeout,
+            exploit,
+            raw,
+            data
+        }: ExeProps= {}
+    ): Promise<Result<T, E>> => {
+        const { clear, signal } = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
+
+        const body = data ? JSON.stringify(data) : null;
+
+        const init = this.init({ signal, body, ...raw });
+
+        const end_point = this.end_point
+
+        return IRequest.run<T, E>({ end_point, init, clear, exploit })
+    };
+
+    extract() {
+        let timeout = REQUEST_TIMEOUT;
+        let reason = ABORTION_REASON;
+
+        const { abort, clear, schedule, signal } = createAbortion({ timeout, reason, auto: false });
+
+        let isStarted = false;
+
+        return {
+            exe: <T extends ResponseData, E = unknown>(args: Omit<ExeProps, "data"> & { reason?: any } = {}) => {
+                isStarted = true;
+
+                schedule(args.timeout, args.reason);
+
+                return this.exe<T, E>({ ...args });
+            },
+
+            cancel: (reason?: any) => {
+                isStarted && abort(reason);
+            },
+        };
+    }
+}
 
 export * from "~/modules/fetch/utils";
