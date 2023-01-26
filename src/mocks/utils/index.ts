@@ -65,13 +65,9 @@ export const mockTestUrl = (exclude: (keyof IUriPayload)[] = []) => {
 
     return {
         TEST_PAYLOAD,
-
         queryString: payloadToQueryString(TEST_PAYLOAD.search),
-
         host: payloadToHostString(TEST_PAYLOAD),
-
         href: payloadToUrlString(TEST_PAYLOAD),
-
         origin: payloadToOriginString(TEST_PAYLOAD),
     };
 };

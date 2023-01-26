@@ -1,7 +1,7 @@
 import { AppURL } from "~/modules/fetch/utils";
 import { mockTestUrl } from "~/mocks/utils";
 
-const { TEST_PAYLOAD, href, host, origin: _origin } = mockTestUrl();
+const { TEST_PAYLOAD, href, host, origin: _origin, queryString } = mockTestUrl();
 
 describe("AppURL class", () => {
     it("works correctly", () => {
@@ -16,6 +16,7 @@ describe("AppURL class", () => {
         expect(url.origin).toBe(_origin);
         expect(url.href).toBe(href);
         expect(url.host).toBe(host);
+        expect(url.queryString).toBe(queryString);
     });
 
     it("works in case of undefined hostname", () => {
@@ -27,12 +28,12 @@ describe("AppURL class", () => {
         Object.entries(TEST_PAYLOAD).forEach(([key, val]) => {
             if (key === "hostname") {
                 expect(url.hostname).toBeUndefined();
-            } else if (key === "host") {
-                expect(url.host).toBeUndefined();
             } else expect(Reflect.get(url, key)).toBe(val);
         });
 
         expect(url.href).toBeUndefined();
+        expect(url.host).toBeUndefined();
+        expect(url.origin).toBeUndefined();
         expect(`${url}`).toBe(`undefined`);
         expect(url.toString()).toBe(``);
     });

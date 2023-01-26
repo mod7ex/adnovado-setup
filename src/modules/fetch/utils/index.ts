@@ -20,7 +20,7 @@ export interface IUriPayload {
 export const payloadToHostString = ({ hostname, port }: Pick<IUriPayload, "hostname" | "port">) => {
     if (hostname) {
         // @ts-ignore
-        if (port) hostname = +`:${port}`;
+        if (port) hostname += `:${port}`;
 
         return hostname;
     }

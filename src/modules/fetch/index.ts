@@ -1,6 +1,5 @@
-import API from "~/config/api.json";
-import { API_HOSTNAME } from "~/constants";
-import { app_join, replaceParams, trimChar, queryToString, type ApiPayload } from "~/utils";
+import { MODE } from "~/constants";
+import { type ApiPayload } from "~/utils";
 import { AppURL, createAbortion } from "~/modules/fetch/utils";
 
 type ResponseData = object;
@@ -39,14 +38,17 @@ interface QueryInit extends IRequestInit {
 type Result<T extends ResponseData, E = unknown> =
     | { success: false; error?: E; message: string }
     | {
-          data: T;
+          data: T | undefined;
           success: true;
           response: Response;
       };
 
-type ExeProps = {
-    abortion?: Pick<ReturnType<typeof createAbortion>, "signal" | "clear">;
+type ExeProps<T = QueryInit> = {
+    abortion?: Pick<ReturnType<typeof createAbortion>, "signal" | "clear">; // think
     timeout?: number;
+    exploit?: <T>(v: Response) => Promise<T>;
+    data?: Record<string, any>;
+    raw?: T;
 };
 
 type ExtractProps = {
@@ -57,7 +59,9 @@ type ExtractProps = {
 type HeadersPayload = Record<string, string>;
 
 abstract class IRequest {
-    constructor(protected _end_point: AppURL | RequestInfo | URL, protected _state?: IRequestInit) {}
+    private _default_method = HttpMethod.GET;
+
+    constructor(protected _end_point: AppURL | string, protected _state?: IRequestInit) {}
 
     static headers = (options?: HeadersPayload) => {
         return new Headers({
@@ -76,7 +80,7 @@ abstract class IRequest {
         throw new TypeError("Network response was not OK");
     }
 
-    request({ signal, headers }: { signal?: AbortSignal; headers?: HeadersPayload }) {
+    get end_point() {
         let _end_point = this._end_point;
 
         if (_end_point instanceof AppURL) {
@@ -85,26 +89,37 @@ abstract class IRequest {
             else throw Error("Invalid end-point");
         }
 
-        return new Request(_end_point, {
-            method: HttpMethod.GET,
-            headers: Query.headers(headers),
-            signal,
-            ...this._state?.raw,
-        });
+        return _end_point;
     }
 
-    exe = async <T extends ResponseData, E = unknown>({ abortion, timeout }: ExeProps = {}): Promise<Result<T, E>> => {
-        if (!abortion) abortion = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
+    init(args?: RequestInit) {
+        return {
+            method: this._default_method,
+            headers: IRequest.headers(),
+            ...this._state?.raw,
+            ...args,
+        };
+    }
 
-        const signal = abortion.signal;
-        const clear = abortion.clear;
-
+    // prettier-ignore
+    protected static async run<T extends ResponseData, E = unknown>(
+        {end_point, init, exploit , clear }:
+        {end_point: string;init: RequestInit; exploit: ExeProps["exploit"], clear: ()=> void }
+    ): Promise<Result<T, E>> {
         try {
-            const response = await fetch(this.request({ signal }));
+            let response: Response;
 
-            Query.check_response(response);
+            if (MODE.TEST) {
+                response = await fetch(end_point, init);
+            } else {
+                response = await fetch(new Request(end_point, init));
+            }
 
-            const data = <T>await response.json(); // ...
+            IRequest.check_response(response);
+
+            let data: T | undefined = undefined;
+
+            exploit && (data = await exploit<T>(response));
 
             return {
                 data,
@@ -122,23 +137,75 @@ abstract class IRequest {
         } finally {
             clear();
         }
+    }
+
+    // ----------------------
+
+    // extract(args: ExtractProps = {}) {
+    //     let timeout = args.timeout ?? REQUEST_TIMEOUT;
+    //     let reason = args.reason ?? ABORTION_REASON;
+
+    //     const { abort, clear, schedule, signal } = createAbortion({ timeout, reason, auto: false });
+
+    //     let isStarted = false;
+
+    //     return {
+    //         exe: <T extends ResponseData, E = unknown>(_args: ExtractProps = {}) => {
+    //             isStarted = true;
+
+    //             schedule(_args.timeout, _args.reason);
+
+    //             return this.exe<T, E>({ ..._args, abortion: { signal, clear } });
+    //         },
+    //         cancel: (reason?: any) => {
+    //             isStarted && abort(reason);
+    //         },
+    //     };
+    // }
+}
+
+export class Query extends IRequest {
+    constructor(_end_point: AppURL | string, _state?: QueryInit) {
+        super(_end_point, _state);
+    }
+
+    // prettier-ignore
+    exe = <T extends ResponseData, E = unknown>(
+        {
+            abortion,
+            timeout,
+            exploit,
+            raw
+        }: Omit<ExeProps, 'data'>= {}
+    ): Promise<Result<T, E>> => {
+        if (!abortion) abortion = createAbortion({ timeout: timeout ?? REQUEST_TIMEOUT, reason: ABORTION_REASON });
+
+        const signal = abortion.signal;
+
+        const clear = abortion.clear;
+
+        const init = this.init({ signal, ...raw });
+
+        const end_point = this.end_point
+
+        return IRequest.run<T, E>({ end_point, init, clear, exploit })
     };
 
-    extract(args: ExtractProps = {}) {
-        let timeout = args.timeout ?? REQUEST_TIMEOUT;
-        let reason = args.reason ?? ABORTION_REASON;
+    extract() {
+        let timeout = REQUEST_TIMEOUT;
+        let reason = ABORTION_REASON;
 
         const { abort, clear, schedule, signal } = createAbortion({ timeout, reason, auto: false });
 
         let isStarted = false;
 
         return {
-            exe: <T extends ResponseData, E = unknown>(_args: ExtractProps = {}) => {
+            exe: <T extends ResponseData, E = unknown>(args: ExtractProps = {}) => {
                 isStarted = true;
 
-                schedule(_args.timeout, _args.reason);
+                schedule(args.timeout, args.reason);
 
-                return this.exe<T, E>({ abortion: { signal, clear } });
+                return this.exe<T, E>({ ...args, abortion: { signal, clear } });
             },
             cancel: (reason?: any) => {
                 isStarted && abort(reason);
@@ -147,16 +214,10 @@ abstract class IRequest {
     }
 }
 
-export class Query extends IRequest {
-    constructor(_end_point: AppURL | RequestInfo | URL, _state?: QueryInit) {
-        super(_end_point, _state);
-    }
-}
-
-export class Mutation extends IRequest {
-    constructor(_end_point: AppURL | RequestInfo | URL, _state?: MutationInit) {
-        super(_end_point, _state);
-    }
-}
+// export class Mutation extends IRequest {
+//     constructor(_end_point: AppURL | string, _state?: MutationInit) {
+//         super(_end_point, _state);
+//     }
+// }
 
 export * from "~/modules/fetch/utils";
