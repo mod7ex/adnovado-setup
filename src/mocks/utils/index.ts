@@ -1,4 +1,4 @@
-import { payloadToUrlString, IUriPayload, payloadToQueryString, payloadToHostString, payloadToOriginString } from "~/modules/fetch";
+import { payloadToUrlString, IUriPayload, payloadToQueryString, payloadToHostString, payloadToOriginString } from "~/modules/fetch/utils";
 
 export enum LOCAL_STORAGE_DEFAULTS {
     KEY = "test key",
